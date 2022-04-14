@@ -46,14 +46,12 @@ class FSN implements ShouldQueue
             $totalRec = Record::where([['id_produk','=', $produk->id_produk]
             ])->get();
             foreach($totalRec as $data){
-                $times = $data->Tanggal; 
+                $times = $data->Tanggal;
                 $day = Carbon::parse($times)->daysInMonth;
                 $totaldays = $totaldays + $day;
             }
             foreach($totalRec as $rec){
             $time = $rec->Tanggal; 
-            Log::info($time);
-            Log::info($rec->id_produk);
             $days = Carbon::parse($time)->daysInMonth;
             $stokawal = $rec->stokawal_produk;
             $stokakhir = $rec->stokakhir_produk;

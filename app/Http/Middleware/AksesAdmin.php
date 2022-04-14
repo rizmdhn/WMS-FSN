@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class AksesAdmin
 {
@@ -16,7 +17,7 @@ class AksesAdmin
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->akses == 'admin'){
+        if(FacadesAuth::user()->akses == 'admin'){
             return $next($request);
         }
 

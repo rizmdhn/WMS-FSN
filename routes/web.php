@@ -14,6 +14,8 @@ Route::any('register', function(){
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', 'HomeController@index');
+Route::post('/chart', 'HomeController@record')->name('chart');
+
 //=========================================================================
 Route::group(['middleware'=>'auth'], function(){
 	Route::resource('employee', 'EmployeeController');
