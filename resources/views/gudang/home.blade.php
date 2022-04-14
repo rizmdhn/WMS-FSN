@@ -7,6 +7,8 @@
     <title>Sistem Informasi Pergudangan</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"></script>
+
 </head>
 
 
@@ -41,6 +43,11 @@
                             @endif
                             <select name="tanggal" id="tanggal">
                                 <option value="0">--- Choose a date ---</option>
+                                {{-- @for ($i = count($tanggal); $i <= (count($tanggal)-3); $i--)
+                                    <option value="{{ $tanggal[$i] }}">{{ $tanggal[$i] }}</option>
+
+                                @endfor
+                                 --}}
                                 @foreach ($tanggal as $item)
                                     <option value="{{ $item }}">{{ $item }}</option>
                                 @endforeach
@@ -50,50 +57,28 @@
                         <!-- /.box-header -->
                         <div class="box-body">
                             {{-- @foreach ($record as $object) --}}
-                            <div style="height: 200px">
+                            <div style="height: 300px">
                                 <canvas id="myChart"></canvas>
                             </div>
                             
-                            <table id="example1" class="table table-bordered table-hover">
+                            <table id="table_id" class="display">
                                 <thead>
-                                    <?php $no = 1; ?>
-                                    <tr style="background-color: rgb(230, 230, 230);">
-                                        <th>No</th>
-                                        <th>Kode Barang</th>
-                                        <th>Nama Barang</th>
-                                        <th>Stock Awal</th>
-                                        <th>Masuk Terakhir</th>
-                                        <th>Keluar Terakhir</th>
-                                        <th>Stock Terakhir</th>
-
+                                    <tr>
+                                        <th>Column 1</th>
+                                        <th>Column 2</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- @foreach ($object as $data)
-                    <tr>
-                      <td>{{ $no++ }}</td>
-                      <td>{{ $data->kode_produk }}</td>
-                      <td>{{ $data->nama_produk }}</td>
-                      <td>{{ $data->stokawal_produk }}</td>
-                      <td>Pada {{ $data->Tanggal .' Sejumlah '. $data->qty_masuk}}</td>
-                      <td>Pada {{ $data->Tanggal .' Sejumlah '. $data->qty_keluar}}</td>
-                      <td>{{ $data->stokakhir_produk }}</td>
-                    </tr>
-                    @endforeach --}}
+                                    <tr>
+                                        <td>Row 1 Data 1</td>
+                                        <td>Row 1 Data 2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Row 2 Data 1</td>
+                                        <td>Row 2 Data 2</td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <strong>Hasil Perhitungan Data : </strong>
-                            <br>
-
-                            {{-- @foreach ($object as $data)
-                 <strong>Per Tanggal {{ $data->Tanggal }}</strong> 
-                 <strong>Persediaan Rata-Rata : </strong> {{ $data->Rata2_persediaan }} 
-                 <strong>TOR Partial : </strong> {{ $data->TOR_partial }} 
-                 <strong>WSP : </strong> {{ $data->WSP }} 
-                 <strong>TOR : </strong> {{ $data->TOR }} 
-                 <br>
-                 @endforeach --}}
                             <br>
                             <hr>
 
@@ -113,23 +98,51 @@
                 var label = [@foreach ($product as $item)
                 "{{ $item->nama_produk }}",
                 @endforeach]
-                var label = [@foreach ($product as $item)
-                "{{ $item->nama_produk }}",
-                @endforeach]
-                console.log(label);
+                var data = "{{ $chartdata }}";
+                var dataset = JSON.parse(data.replace(/&quot;/g,'"'));
+                var databulan = dataset['12-2021'];
+                const qty_keluar = [];
+                const qty_masuk = [];
+                const qty_stok = [];
+                const qty_stokawal = [];
+                for (var j in databulan){
+                    qty_keluar.push(databulan[j].qty_keluar);
+                    qty_stokawal.push(databulan[j].stokawal_produk);
+                    qty_masuk.push(databulan[j].qty_masuk);
+                    qty_stok.push(databulan[j].stokakhir_produk);
+                }
                 const ctx = document.getElementById('myChart');
                 const myChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: label,
                         datasets: [{
-                            label: 'Kuantitas Keluar',
-                            data: [12, 19, 3, 5, 2, 3],
+                            label: 'Stok Awal',
+                            data: qty_stokawal,
                             backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235)',
                             ],
-                            borderWidth: 1
-                        }]
+                            borderWidth: 3
+                        },{
+                            label: 'Kuantitas Keluar',
+                            data: qty_keluar,
+                            backgroundColor: [
+                                'rgba(255, 99, 132)',
+                            ],
+                            borderWidth: 3
+                        },{
+                            label: 'Kuantitas Masuk',
+                            data: qty_masuk,
+                            backgroundColor: [
+                                'rgba(255, 206, 86)',
+                            ],
+                            borderWidth: 3},{
+                            label: 'Stok Akhir',
+                            data: qty_stok,
+                            backgroundColor: [
+                                'rgba(75, 192, 192)',
+                            ],
+                            borderWidth: 3}]
                     },
                     options: {
                         responsive:true,
@@ -141,17 +154,10 @@
                         }
                     }
                 });
-                $(function() {
-                    $('#example1').DataTable()
-                    $('#example2').DataTable({
-                        'paging': true,
-                        'lengthChange': false,
-                        'searching': false,
-                        'ordering': true,
-                        'info': true,
-                        'autoWidth': false
-                    })
-                })
+
+                $(document).ready( function () {
+                    $('#example1').DataTable();
+                } );
             </script>
         </div>
         <!-- /#page-content-wrapper -->
