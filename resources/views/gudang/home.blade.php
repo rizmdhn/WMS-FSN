@@ -42,7 +42,6 @@
                                 </div>
                             @endif
                             <select name="tanggal" id="tanggal">
-                                <option value="0">--- Choose a date ---</option>
                                 {{-- @for ($i = count($tanggal); $i <= (count($tanggal)-3); $i--)
                                     <option value="{{ $tanggal[$i] }}">{{ $tanggal[$i] }}</option>
 
@@ -57,7 +56,7 @@
                         <!-- /.box-header -->
                         <div class="box-body">
                             {{-- @foreach ($record as $object) --}}
-                            <div style="height: 300px">
+                            <div id="containercanvas"style="height: 300px">
                                 <canvas id="myChart"></canvas>
                             </div>
                             
@@ -92,12 +91,22 @@
             <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
             <script>
-                var label = [@foreach ($product as $item)
+                var myChart =  new Chart();
+                var resetCanvas = function () {
+                        $('#mychart').remove(); // this is my <canvas> element
+                        $('#containercanvas').append('<canvas id="mychart"><canvas>');
+                        canvas = document.querySelector('#mychart'); // why use jQuery?
+                        ctx = canvas.getContext('2d');
+                        };
+                // Initialize 
+                $(document).ready( function () {         
+                    var valueSelected = $('#tanggal').val();
+                    var label = [@foreach ($product as $item)
                 "{{ $item->nama_produk }}",
                 @endforeach]
                 var data = "{{ $chartdata }}";
                 var dataset = JSON.parse(data.replace(/&quot;/g,'"'));
-                var databulan = dataset['12-2021'];
+                var databulan = dataset[valueSelected];
                 const qty_keluar = [];
                 const qty_masuk = [];
                 const qty_stok = [];
@@ -109,7 +118,7 @@
                     qty_stok.push(databulan[j].stokakhir_produk);
                 }
                 const ctx = document.getElementById('myChart');
-                const myChart = new Chart(ctx, {
+                myChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: label,
@@ -151,9 +160,7 @@
                         }
                     }
                 });
-                $(document).ready( function () {
-                    
-                    $('#table_id').DataTable({
+                $('#table_id').DataTable({
                     data: databulan,
                     autowidth: true,
                     columns: [{
@@ -171,8 +178,97 @@
                         },
                 ]
                 });
-                } );
-                    console.log(databulan);
+                });
+                
+                // perubahan 
+                $('#tanggal').on('change', function(e) {
+                    myChart.destroy();
+                    resetCanvas();
+                    var optionSelected = $("option:selected", this);
+                    var valueSelected = this.value;
+                    var label = [@foreach ($product as $item)
+                "{{ $item->nama_produk }}",
+                @endforeach]
+                var data = "{{ $chartdata }}";
+                var dataset = JSON.parse(data.replace(/&quot;/g,'"'));
+                var databulan = dataset[valueSelected];
+                const qty_keluar = [];
+                const qty_masuk = [];
+                const qty_stok = [];
+                const qty_stokawal = [];
+                for (var j in databulan){
+                    qty_keluar.push(databulan[j].qty_keluar);
+                    qty_stokawal.push(databulan[j].stokawal_produk);
+                    qty_masuk.push(databulan[j].qty_masuk);
+                    qty_stok.push(databulan[j].stokakhir_produk);
+                }
+                const ctx = document.getElementById('myChart');
+
+                myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: label,
+                        datasets: [{
+                            label: 'Stok Awal',
+                            data: qty_stokawal,
+                            backgroundColor: [
+                                'rgba(54, 162, 235)',
+                            ],
+                            borderWidth: 3
+                        },{
+                            label: 'Kuantitas Keluar',
+                            data: qty_keluar,
+                            backgroundColor: [
+                                'rgba(255, 99, 132)',
+                            ],
+                            borderWidth: 3
+                        },{
+                            label: 'Kuantitas Masuk',
+                            data: qty_masuk,
+                            backgroundColor: [
+                                'rgba(255, 206, 86)',
+                            ],
+                            borderWidth: 3},{
+                            label: 'Stok Akhir',
+                            data: qty_stok,
+                            backgroundColor: [
+                                'rgba(75, 192, 192)',
+                            ],
+                            borderWidth: 3}]
+                    },
+                    options: {
+                        responsive:true,
+                        maintainAspectRatio	:false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+                $('#table_id').DataTable().destroy();
+
+                $('#table_id').DataTable({
+                    data: databulan,
+                    autowidth: true,
+                    columns: [{
+                        data : 'kode_produk'
+                        },{
+                        data : 'nama_produk'
+                        },{
+                        data : 'stokawal_produk'
+                        },{
+                        data : 'qty_masuk'
+                        },{
+                        data : 'qty_keluar'
+                        },{
+                        data : 'stokakhir_produk'
+                        },
+                ]
+                });
+                });
+                
+               
             </script>
         </div>
         <!-- /#page-content-wrapper -->
