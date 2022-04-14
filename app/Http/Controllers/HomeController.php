@@ -62,7 +62,7 @@ class HomeController extends Controller
             dispatch(new checkrecord());
         
 
-        return view('gudang.home',['pesan' => $stockalert, 'tanggal'=> $tanggal, 'chartdata' => $recordpermonth]);
+        return view('gudang.home',['pesan' => $stockalert, 'tanggal'=> $tanggal, 'chartdata' => $recordpermonth, 'product' => $product]);
     }
 
     public function record(Request $request){

@@ -6,7 +6,7 @@
     @include('templates.head')
     <title>Sistem Informasi Pergudangan</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 
@@ -33,31 +33,27 @@
                             <br>
                             <h3 class="box-title">LAPORAN HASIL FSN</h3>
                             @if ($pesan != null)
-                            <div class="alert alert-danger" role="alert">
-                            @foreach ($pesan as $item)
-                            <b>Stock Menipis</b> : {{ $item }}
-                            @endforeach
-                          </div>
+                                <div class="alert alert-danger" role="alert">
+                                    @foreach ($pesan as $item)
+                                        <b>Stock Menipis</b> : {{ $item }}
+                                    @endforeach
+                                </div>
                             @endif
                             <select name="tanggal" id="tanggal">
                                 <option value="0">--- Choose a date ---</option>
-                               @foreach ($tanggal as $item)
-                               <option value="{{ $item }}">{{ $item }}</option>
-                               @endforeach
+                                @foreach ($tanggal as $item)
+                                    <option value="{{ $item }}">{{ $item }}</option>
+                                @endforeach
                             </select>
                         </div>
-                        
+
                         <!-- /.box-header -->
                         <div class="box-body">
                             {{-- @foreach ($record as $object) --}}
                             <div style="height: 200px">
                                 <canvas id="myChart"></canvas>
-                           
-                                    
                             </div>
-                            @foreach ($chartdata as $item)
-                            {{ $item }} 
-                            @endforeach
+                            
                             <table id="example1" class="table table-bordered table-hover">
                                 <thead>
                                     <?php $no = 1; ?>
@@ -113,35 +109,31 @@
             @include('templates.scripts')
 
             <!-- page script -->
-            <script type="text/javascript">
-                var selected = 
-                if
-                var ctx = document.getElementById('myChart');
-                var myChart = echarts.init(ctx);
-                myChart.setOption({
+            <script>
+                var label = [@foreach ($product as $item)
+                "{{ $item->nama_produk }}",
+                @endforeach]
+                var label = [@foreach ($product as $item)
+                "{{ $item->nama_produk }}",
+                @endforeach]
+                console.log(label);
+                const ctx = document.getElementById('myChart');
+                const myChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: [
-                            'january'
-                        ],
+                        labels: label,
                         datasets: [{
-                            label: 'Jumlah Masuk',
+                            label: 'Kuantitas Keluar',
                             data: [12, 19, 3, 5, 2, 3],
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.2)',
                             ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                            ],
                             borderWidth: 1
-                        },{
-                            label: 'Jumlah Keluar',
-                            data : [10,2,4,2,3,1],
                         }]
                     },
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
+                        responsive:true,
+                        maintainAspectRatio	:false,
                         scales: {
                             y: {
                                 beginAtZero: true
