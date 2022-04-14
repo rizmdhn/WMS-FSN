@@ -7,8 +7,8 @@
     <title>Sistem Informasi Pergudangan</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"></script>
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script src = "http://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js" defer ></script>
 </head>
 
 
@@ -63,20 +63,15 @@
                             
                             <table id="table_id" class="display">
                                 <thead>
-                                    <tr>
-                                        <th>Column 1</th>
-                                        <th>Column 2</th>
-                                    </tr>
+                                    <th>Kode Produk</th>
+                                    <th>Nama Produk</th>
+                                    <th>Stok Awal</th>
+                                    <th>Jumlah Masuk</th>
+                                    <th>Jumlah Keluar</th>
+                                    <th>Stok Akhir</th>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Row 1 Data 1</td>
-                                        <td>Row 1 Data 2</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Row 2 Data 1</td>
-                                        <td>Row 2 Data 2</td>
-                                    </tr>
+                                   
                                 </tbody>
                             </table>
                             <br>
@@ -94,6 +89,8 @@
             @include('templates.scripts')
 
             <!-- page script -->
+            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
             <script>
                 var label = [@foreach ($product as $item)
                 "{{ $item->nama_produk }}",
@@ -154,10 +151,28 @@
                         }
                     }
                 });
-
                 $(document).ready( function () {
-                    $('#example1').DataTable();
+                    
+                    $('#table_id').DataTable({
+                    data: databulan,
+                    autowidth: true,
+                    columns: [{
+                        data : 'kode_produk'
+                        },{
+                        data : 'nama_produk'
+                        },{
+                        data : 'stokawal_produk'
+                        },{
+                        data : 'qty_masuk'
+                        },{
+                        data : 'qty_keluar'
+                        },{
+                        data : 'stokakhir_produk'
+                        },
+                ]
+                });
                 } );
+                    console.log(databulan);
             </script>
         </div>
         <!-- /#page-content-wrapper -->
