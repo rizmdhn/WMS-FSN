@@ -23,6 +23,7 @@ Route::group(['middleware'=>'auth'], function(){
 	//=========================================================================
 	Route::resource('product', 'ProductController');
 	Route::get('/product/{id_produk}/show', 'ProductController@show');
+	Route::get('/productcat/{id_produk}', 'ProductController@getCat');
 	//=========================================================================
 	Route::get('/sell', 'SellController@index')->name('sell.index');
 	Route::post('/sell', 'SellController@store')->name('sell.store');
@@ -59,6 +60,7 @@ Route::group(['middleware'=>'auth'], function(){
 		Route::resource('category', 'CategoryController');
 		Route::resource('unit', 'UnitController');
 		Route::resource('user', 'UserController');
+		Route::resource('gudang', 'GudangController');
 	});
 	// Route::get('/user', 'UserController@index')->name('user.index')->middleware('akses.admin');
 	//=========================================================================

@@ -43,14 +43,20 @@
 
                   <div class="form-group">
                     <label>Nama Barang</label>
-                    <select class="form-control form-control-sm" name="id_produk">
+                    <select class="form-control form-control-sm" name="id_produk" id="id_produk">
                       <option>- Nama barang -</option>
                       @foreach($products as $product)
                       <option value="{{$product->id_produk}}">{{$product->nama_produk}}</option>
                       @endforeach
                     </select>
                   </div>
+                 
+                  <div class="form-group" id="expiry" style="display: none;">
+                    <label>Expired</label>
+                    <input required class="form-control form-control-sm" type="date" name="expired" id="expired">                    
+                  </div>
 
+              
                   <div class="form-group">
                     <label>Jumlah</label>
                     <input class="form-control" type="text" name="qty_purchase">
@@ -127,6 +133,28 @@
   @include('templates.scripts')
   <!-- page script -->
   <script>
+ 
+$('#id_produk').on('change', function(e) {
+  const id = $('#id_produk').val();
+  console.log(id);
+  $.ajax({
+    method: 'GET',
+    url: '/productcat/' + id ,
+    success: function( response ){
+      if(response.kategori == "PUPUK" || response.kategori == "BAHAN KIMIA (CAIR)"){
+        $("#expiry").css("display", "block");
+      }else{
+        $("#expiry").css("display", "none");
+        $("#expired").prop( "disabled", true );
+      }
+    },
+    error: function( e ) {
+        console.log(e);
+    }
+});
+
+});
+
     $(function () {
       $('#example1').DataTable()
       $('#example2').DataTable({

@@ -3,7 +3,7 @@
 
 <head>
   @include('templates.head')
-  <title>Halaman Data Barang</title>
+  <title>Halaman Data Gudang</title>
   <style type="text/css">
     section{
       min-height: 500px;
@@ -37,21 +37,21 @@
         <div class="container-fluid">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Data barang di gudang</h3>
+              <h3 class="box-title">Data gudang</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               @include('gudang/notification')
               <div style="margin-bottom: 10px;" class="print">
                 @if(Auth::user()->akses == 'admin')
-                <a href="{{ route('product.create') }}"> <button class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-plus"></i> Tambah data barang</button></a>
+                <a href="{{ route('gudang.create') }}"> <button class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-plus"></i> Tambah data gudang</button></a>
                 @endif
               </div>
 
               <div style="margin-bottom: 10px;" class="print">
-                <form class="form-inline" action="{{ route('product.index') }}" method="get">
+                <form class="form-inline" action="{{ route('gudang.index') }}" method="get">
                   <div class="form-group">
-                    <input type="text" name="cari" class="form-control" placeholder="nama barang...">
+                    <input type="text" name="cari" class="form-control" placeholder="nama gudang...">
                   </div>
                   <div class="form-group">
                     <button type="submit" class="btn btn-primary">Cari</button>
@@ -61,44 +61,41 @@
               
               <table class="table table-bordered table-hover">
                 <thead>
-                  <?php $no=1;
-                  Log::info($products);
-                   ?>
+                  <?php $no=1; ?>
                   <tr style="background-color: rgb(230, 230, 230);">
                     <th>No</th>
-                    <th>Kode Barang</th>
-                    <th>Nama</th>
-                    <th>Kategori</th>
-                    <th>Foto</th>
-                    <th>Stok</th>
-                    <th>Lokasi</th>
+                    <th>Kode Gudang</th>
+                    <th>Nama Gudang</th>
+                    <th>Kapasitas Gudang Total</th>
+                    <th>Kapasitas Barang F</th>
+                    <th>Kapasitas Barang S</th>
+                    <th>Kapasitas Barang N</th>
                     <th class="print">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach($products as $product)
+                  @foreach($gudang as $item)
                   <tr>
                     <td>{{ $no++ }}</td>
-                    <td>{{ $product->kode_produk }}</td>
-                    <td>{{ $product->nama_produk }}</td>
-                    <td>{{ $product->categories->nama_kategori }}</td>
-                    <td><img src="{{asset('image/'.$product->image)}}" alt="gambar"></td>
-                    <td>{{ $product->stok_produk }}</td>
-                    <td>{{ $product->gudang->nama_gudang }}</td>
-                    <td class="print">
-                      <a href="product/{{$product->id_produk}}/show"><button class="btn btn-primary btn-sm">Detail</button></a>
+                    <td>{{ $item->kode_gudang }}</td>
+                    <td>{{ $item->nama_gudang }}</td>
+                    <td>{{ $item->Kapasitas_GT }}</td>
+                    <td>{{ $item->Kapasitas_F }}</td>
+                    <td>{{ $item->Kapasitas_S }}</td>
+                    <td>{{ $item->Kapasitas_N }}</td>
                       @if(Auth::user()->akses == 'admin')
-                        <a href="product/{{$product->id_produk}}/edit"><button class="btn btn-warning btn-sm">Edit</button></a>
-                        <button class="btn btn-danger btn-sm" data-delid={{$product->id_produk}} data-toggle="modal" data-target="#delete"><i class="glyphicon glyphicon-trash"></i> Hapus</button>
-                      @endif
+                    <td>
+                      <a href="supplier/{{$item->id_gudang}}/edit"><button class="btn btn-warning btn-xs">Edit</button></a>
+                      <button class="btn btn-danger btn-xs" data-delid={{$item->id_gudang}} data-toggle="modal" data-target="#delete"><i class="glyphicon glyphicon-trash"></i>Hapus</button>
                     </td>
+                      @endif
                   </tr>
                   @endforeach
                 </tbody>
               </table>
+
               <div class="print">
                 <ul class="pagination">
-                  {{ $products->links() }}
                 </ul>
               </div>
             <!-- /.box-body -->
@@ -123,7 +120,7 @@
           </button>
           <h4 class="modal-title text-center" id="myModalLabel">Delete Confirmation</h4>
         </div>
-        <form action="{{route('product.destroy', 'test')}}" method="post">
+        <form action="{{route('gudang.destroy', 'test')}}" method="post">
           {{method_field('delete')}}
           {{csrf_field()}}
           <div class="modal-body" style="background-color: rgb(230, 230, 230)">

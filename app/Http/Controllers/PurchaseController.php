@@ -37,7 +37,6 @@ class PurchaseController extends Controller
         if (Purchase::create($request->all())) {
             $timestemp = $request->tgl_purchase;
             $month = Carbon::createFromFormat('Y-m-d', $timestemp)->month;
-
             $record = Record::where('id_produk', $request->id_produk)->WhereMonth('tanggal', $month)->first();
             $recordlast = Record::where('id_produk', $request->id_produk)->WhereMonth('tanggal', $month - 1)->first();
             if (is_null($record)) {
@@ -56,30 +55,7 @@ class PurchaseController extends Controller
                 Record::create($data);
             } else {
                 dispatch(new checkrecord());
-                // $id = $record->id_record;
-                // $totalsell = 0;
-                // $totalpurc = 0;
-                // $total_sell = Sell::where('id_produk', $request->id_produk)->whereMonth('tgl_sell', $month)->get();
-                // $total_purchase = Purchase::where('id_produk', $request->id_produk)->whereMonth('tgl_purchase', $month)->get();
-                // foreach ($total_purchase as $total) {
-                //     $totalpurc = $totalpurc + $total->qty_purchase;
-                // }
-                // foreach ($total_sell as $total) {
-                //     $totalsell = $totalsell + $total->qty;
-                // }
-                // $record = Record::where([
-                //     ['id_produk', '=', $request->id_produk],
-                //     ['tanggal', '<=',  $timestemp]
-                // ])->orderby('tanggal', 'desc')->take(2)->get();
-                // if ($record->count() > 1) {
-                //     $input['stokawal_produk'] = $record[1]->stokakhir_produk;
-                // } else {
-                //     $input['stokawal_produk'] = $record[0]->stokawal_produk;
-                // }
-                // $input['qty_masuk'] = $totalpurc;
-                // $input['qty_keluar'] = $totalsell;
-                // $input['stokakhir_produk'] = ($input['stokawal_produk'] + $totalpurc - $totalsell);
-                // Record::where('id_record', $id)->update($input);
+
             }
         };
 
@@ -92,32 +68,6 @@ class PurchaseController extends Controller
         $purchases = Purchase::find($id_purchase);
         $purchases->delete();
         dispatch(new checkrecord());
-        // $timestemp = $purchases->tgl_purchase;
-        // $month = Carbon::createFromFormat('Y-m-d', $timestemp)->month;
-        // $year = Carbon::createFromFormat('Y-m-d', $timestemp)->year;
-        // $record = Record::where('id_produk', $purchases->id_produk)->WhereMonth('tanggal', $month)
-        // ->whereYear('tanggal', '=', $year)->first();
-        // $id = $record->id_record;
-        //     $totalsell = 0;
-        //     $totalpurc = 0;
-        //     $total_sell = Sell::where('id_produk', $purchases->id_produk)->whereMonth('tgl_sell', $month)
-        //     ->whereYear('tgl_sell', '=', $year)->get();
-        //     $total_purchase = Purchase::where('id_produk', $purchases->id_produk)->whereMonth('tgl_purchase', $month)
-        //     ->whereYear('tgl_purchase', '=', $year)->get();
-        //     foreach($total_purchase as $total ){
-        //         $totalpurc = $totalpurc + $total->qty_purchase;
-        //     }
-        //     foreach($total_sell as $total ){
-        //         $totalsell = $totalsell + $total->qty;
-        //     }
-        //     $product = Record::where([['id_produk','=', $purchases->id_produk],
-        //     ['tanggal', '<=',  $timestemp]
-        //     ])->orderby('tanggal', 'desc')->take(2)->get();
-           
-        //     $input['qty_masuk'] = $totalpurc;
-        //     $input['qty_keluar'] = $totalsell;
-        //     $input['stokakhir_produk'] = ($record->stokawal_produk + $totalpurc - $totalsell);
-        //     Record::where('id_record',$id)->update($input);
         return redirect('purchase')->with('pesan', 'Barang masuk dibatalkan!');
     }
 

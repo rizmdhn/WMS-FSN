@@ -16,11 +16,11 @@
       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;">
         Database
       </a>
-
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="{{ route('category.index') }}"></i>Kategori Barang</a>
         <a class="dropdown-item" href="{{ route('unit.index') }}"></i>Satuan</a>
         <a class="dropdown-item" href="{{ route('user.index') }}">User</a>
+        <a class="dropdown-item" href="{{ route('gudang.index') }}">Gudang</a>
       </div>
     </li>
     @endif

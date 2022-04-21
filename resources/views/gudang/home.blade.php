@@ -34,10 +34,19 @@
                         <div class="box-header">
                             <br>
                             <h3 class="box-title">LAPORAN HASIL FSN</h3>
-                            @if ($pesan != null)
+                            @if ($pesanstock != null)
                                 <div class="alert alert-danger" role="alert">
-                                    @foreach ($pesan as $item)
-                                        <b>Stock Menipis</b> : {{ $item }}
+                                    <b>Stock Barang Menipis</b> : 
+                                    @foreach ($pesanstock as $item)
+                                        {{ $item }}
+                                    @endforeach
+                                </div>
+                            @endif
+                            @if ($pesanexpired != null)
+                                <div class="alert alert-danger" role="alert">
+                                    <b>Barang Sudah Expired Harap Segera Dihapus</b> :
+                                    @foreach ($pesanexpired as $item)
+                                         {{ $item }}
                                     @endforeach
                                 </div>
                             @endif
@@ -68,6 +77,8 @@
                                     <th>Jumlah Masuk</th>
                                     <th>Jumlah Keluar</th>
                                     <th>Stok Akhir</th>
+                                    <th>TOR</th>
+                                    <th>Kategori Barang</th>
                                 </thead>
                                 <tbody>
                                    
@@ -75,9 +86,29 @@
                             </table>
                             <br>
                             <hr>
+                            <h3 class="box-title">Kapasitas Gudang</h3>
+                            <table id="table_gudang" class="table table-bordered">
 
+                                <tbody>
+                                    <tr>
+                                        <th>Total enodes</th>
+                                        <td>{{ $gudang->Kapasitas_GT }}</td>
+                                      </tr>
+                                      <tr>
+                                        <th>Enodes Barang F</th>
+                                        <td>{{ $gudang->Kapasitas_F - $pemakaian['F']}} / {{ $gudang->Kapasitas_F }}</td>
+                                      </tr>
+                                      <tr>
+                                        <th>Enodes Barang S</th>
+                                        <td>{{ $gudang->Kapasitas_S - $pemakaian['S']}} / {{ $gudang->Kapasitas_S }}</td>
+                                      </tr>
+                                      <tr>
+                                        <th>Enodse Barang N</th>
+                                        <td>{{ $gudang->Kapasitas_N - $pemakaian['N']}} / {{ $gudang->Kapasitas_N }}</td>
+                                      </tr>
+                                </tbody>
+                            </table>
                             {{-- @endforeach --}}
-
                         </div>
                         <!-- /.box-body -->
                     </div>
@@ -105,7 +136,9 @@
                 "{{ $item->nama_produk }}",
                 @endforeach]
                 var data = "{{ $chartdata }}";
+                var data_gudang = "{{ $gudang }}";
                 var dataset = JSON.parse(data.replace(/&quot;/g,'"'));
+                var gudang = JSON.parse(data_gudang.replace(/&quot;/g,'"'));
                 var databulan = dataset[valueSelected];
                 const qty_keluar = [];
                 const qty_masuk = [];
@@ -116,6 +149,13 @@
                     qty_stokawal.push(databulan[j].stokawal_produk);
                     qty_masuk.push(databulan[j].qty_masuk);
                     qty_stok.push(databulan[j].stokakhir_produk);
+                    if(databulan[j].TOR > 3){
+                        databulan[j]['kategori'] = 'F';
+                    } else if( databulan[j].TOR > 1){
+                        databulan[j]['kategori'] = 'S';
+                    } else{
+                        databulan[j]['kategori'] = 'N';
+                    }
                 }
                 const ctx = document.getElementById('myChart');
                 myChart = new Chart(ctx, {
@@ -163,6 +203,8 @@
                 $('#table_id').DataTable({
                     data: databulan,
                     autowidth: true,
+                    info:           true,
+    
                     columns: [{
                         data : 'kode_produk'
                         },{
@@ -175,9 +217,15 @@
                         data : 'qty_keluar'
                         },{
                         data : 'stokakhir_produk'
+                        },{
+                        data : 'TOR'
+                        },{
+                        data : 'kategori'
                         },
+                        
                 ]
                 });
+
                 });
                 
                 // perubahan 
@@ -201,6 +249,13 @@
                     qty_stokawal.push(databulan[j].stokawal_produk);
                     qty_masuk.push(databulan[j].qty_masuk);
                     qty_stok.push(databulan[j].stokakhir_produk);
+                    if(databulan[j].TOR > 3){
+                        databulan[j]['kategori'] = 'F';
+                    } else if( databulan[j].TOR > 1){
+                        databulan[j]['kategori'] = 'S';
+                    } else{
+                        databulan[j]['kategori'] = 'N';
+                    }
                 }
                 const ctx = document.getElementById('myChart');
 
@@ -263,6 +318,10 @@
                         data : 'qty_keluar'
                         },{
                         data : 'stokakhir_produk'
+                        },{
+                        data : 'TOR'
+                        },{
+                        data : 'kategori'
                         },
                 ]
                 });

@@ -62,14 +62,19 @@
 									<div class="form-group">
 										<label>Stok Barang</label>
 										<input class="form-control" type="number" name="stok_produk" value="{{ $products->stok_produk }}">
-									</div><br>
+									</div>
+									<div class="form-group">
+										<label>Dimensi</label>
+										<input required="" class="form-control" type="number" name="jumlah_enodes" value="{{ $products->jumlah_enodes }}">
+									</div>
 									<div class="form-group">
 										<label>Satuan Barang</label>
 										{{ Form::select('id_unit', \App\Unit::pluck('nama_unit', 'id_unit'), NULL, ['class'=>'form-control']) }}
 									</div>
 									<div class="form-group">
-										<label>Lokasi</label>
-										<input class="form-control" type="text" name="lokasi" value="{{ $products->lokasi }}">
+										<label>Lokasi Barang</label>
+										{{ Form::select('id_gudang', \App\gudang::pluck('nama_gudang', 'id_gudang'), NULL, ['class'=>'form-control']) }}
+									
 									</div>
 									<div class="form-group">
 										<label>Keterangan</label>
@@ -77,7 +82,7 @@
 									</div>
 									<div class="form-group">
 										<input class="btn btn-primary btn-sm" type="submit" name="submit" value="Simpan">
-										<input type="reset" class="btn btn-danger btn-sm" value="Reset">
+										<input type="button" class="btn btn-danger btn-sm" onclick="window.history.back();" value="cancel">
 										{{csrf_field()}}
 										<input type="hidden" name="_method" value="PUT">
 									</div>	

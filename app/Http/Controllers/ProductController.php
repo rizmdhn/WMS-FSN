@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests;
 use App\Product;
 use App\Category;
+use App\gudang;
 use App\Unit;
 use App\Supplier;
 use Illuminate\Support\Facades\File;
@@ -45,8 +46,9 @@ class ProductController extends Controller
         $categories = Category::all();
         $units = Unit::all();
         $suppliers = Supplier::all();
+        $gudang = gudang::all();
 
-        return view('gudang.product.create', compact('categories', 'units', 'suppliers'));
+        return view('gudang.product.create', compact('categories', 'units', 'suppliers', 'gudang'));
     }
 
     /**
@@ -69,7 +71,7 @@ class ProductController extends Controller
       $products->id_supplier = $request->id_supplier;
       $products->stok_produk = $request->stok_produk;
       $products->id_unit     = $request->id_unit;
-      $products->lokasi      = $request->lokasi;
+      $products->id_gudang    = $request->id_gudang;
       $products->ket_produk  = $request->ket_produk;
 
       if($request->hasFile('image')){
@@ -126,7 +128,7 @@ class ProductController extends Controller
         $products->id_supplier = $request->id_supplier;
         $products->stok_produk = $request->stok_produk;
         $products->id_unit     = $request->id_unit;
-        $products->lokasi      = $request->lokasi;
+        $products->id_gudang    = $request->id_gudang;
         $products->ket_produk  = $request->ket_produk;
 
         if($request->hasFile('image')){
@@ -155,4 +157,14 @@ class ProductController extends Controller
 
       return back()->with('pesan', 'Data berhasil dihapus');
     }
+
+    public function getCat($id_produk){
+        $products = Product::findOrFail($id_produk);
+        return response()->json([
+            'success' => 'true',
+            'kategori' => $products->categories->nama_kategori,
+        ]);
+    }
+
+    
 }

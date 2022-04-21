@@ -67,9 +67,16 @@ class FSN implements ShouldQueue
                 $input['TOR_partial'] = $torpartial;
                 $input['wsp'] = $wsp;
                 $input['TOR'] = $TOR;
+                if($TOR > 3){
+                    $update['kategori_fsn'] = '1';
+                } elseif ($TOR > 1){
+                    $update['kategori_fsn'] = '2';
+                }else{
+                    $update['kategori_fsn'] = '3';
+                }
                 Record::where('id_record',$rec->id_record)->update($input);
             }
-            
+            Product::where('id_produk', $produk->id_produk)->update($update);
     }
 
 }

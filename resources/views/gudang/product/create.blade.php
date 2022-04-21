@@ -69,6 +69,10 @@
 												<input required="" class="form-control" type="number" name="stok_produk">
 											</div>
 											<div class="form-group">
+												<label>Dimensi</label>
+												<input required="" class="form-control" type="number" name="jumlah_enodes">
+											</div>
+											<div class="form-group">
 												<label>Satuan</label>
 												<select class="form-control" name="id_unit">
 													<option>-- Satuan Produk --</option>
@@ -79,7 +83,12 @@
 											</div>
 											<div class="form-group">
 												<label>Lokasi Barang</label>
-												<input required="" class="form-control" type="text" name="lokasi">
+												<select class="form-control" name="id_gudang">
+													<option>-- Lokasi gudang --</option>
+													@foreach($gudang as $item)
+													<option value="{{ $item->id_gudang }}">{{ $item->nama_gudang }}</option>
+													@endforeach
+												</select>											
 											</div>
 											<div class="form-group">
 												<label>Keterangan</label>
