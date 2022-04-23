@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 08, 2022 at 12:03 AM
+-- Generation Time: Apr 24, 2022 at 12:09 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.28
 
@@ -64,7 +64,8 @@ CREATE TABLE `categories` (
 
 INSERT INTO `categories` (`id_kategori`, `nama_kategori`, `created_at`, `updated_at`) VALUES
 (6, 'PUPUK', '2022-03-27 16:27:02', '2022-03-27 16:27:02'),
-(8, 'BAHAN KIMIA (CAIR)', '2022-03-27 16:29:22', '2022-03-27 16:29:22');
+(8, 'BAHAN KIMIA (CAIR)', '2022-03-27 16:29:22', '2022-03-27 16:29:22'),
+(9, 'PELET', '2022-04-18 21:43:50', '2022-04-18 21:43:50');
 
 -- --------------------------------------------------------
 
@@ -96,6 +97,20 @@ INSERT INTO `employees` (`id_karyawan`, `sap`, `nama_karyawan`, `id_gender`, `tg
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `fsn`
+--
+
+CREATE TABLE `fsn` (
+  `id_record` float NOT NULL,
+  `Rata2_persediaan` float NOT NULL,
+  `TOR_partial` float NOT NULL,
+  `WSP` float NOT NULL,
+  `TOR` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `genders`
 --
 
@@ -113,6 +128,31 @@ CREATE TABLE `genders` (
 INSERT INTO `genders` (`id_gender`, `nama_gender`, `created_at`, `updated_at`) VALUES
 (1, 'Laki-laki', '2019-03-22 09:38:24', '2019-03-22 09:38:24'),
 (3, 'Perempuan', '2019-11-19 06:18:02', '2019-11-19 06:26:48');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gudang`
+--
+
+CREATE TABLE `gudang` (
+  `id_gudang` int(11) NOT NULL,
+  `kode_gudang` varchar(191) NOT NULL,
+  `nama_gudang` varchar(191) NOT NULL,
+  `Kapasitas_GT` int(10) NOT NULL,
+  `Kapasitas_F` int(10) NOT NULL,
+  `Kapasitas_S` int(10) NOT NULL,
+  `Kapasitas_N` int(10) NOT NULL,
+  `updated_at` date NOT NULL,
+  `created_at` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `gudang`
+--
+
+INSERT INTO `gudang` (`id_gudang`, `kode_gudang`, `nama_gudang`, `Kapasitas_GT`, `Kapasitas_F`, `Kapasitas_S`, `Kapasitas_N`, `updated_at`, `created_at`) VALUES
+(1, 'G_001', 'Gudang Jakarta', 1000, 600, 300, 100, '2022-04-18', '2022-04-18');
 
 -- --------------------------------------------------------
 
@@ -185,8 +225,10 @@ CREATE TABLE `products` (
   `stok_produk` int(11) NOT NULL,
   `id_unit` int(10) UNSIGNED NOT NULL,
   `id_supplier` int(10) UNSIGNED NOT NULL,
-  `lokasi` varchar(200) NOT NULL,
+  `id_gudang` int(10) NOT NULL,
   `ket_produk` text NOT NULL,
+  `jumlah_enodes` int(10) NOT NULL,
+  `Kategori_fsn` int(10) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -195,10 +237,11 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id_produk`, `kode_produk`, `nama_produk`, `id_kategori`, `image`, `stok_produk`, `id_unit`, `id_supplier`, `lokasi`, `ket_produk`, `created_at`, `updated_at`) VALUES
-(5, 'MKP01', 'MKP Pak Tani', 6, '1648398757.jpg', 30, 1, 1, 'Gudang', 'Pupuk 1 KG', '2022-03-27 16:32:37', '2022-03-27 16:32:37'),
-(6, 'BRN001', 'Boron Plus', 6, '1648398839.jpg', 180, 1, 1, 'Gudang', 'Boron Plus', '2022-03-27 16:33:59', '2022-03-27 16:33:59'),
-(7, 'PR001', 'Panen Raya', 6, '1648424692.jpg', 100, 1, 1, 'Gudang', 'Panen Raya', '2022-03-27 23:44:52', '2022-03-27 23:44:52');
+INSERT INTO `products` (`id_produk`, `kode_produk`, `nama_produk`, `id_kategori`, `image`, `stok_produk`, `id_unit`, `id_supplier`, `id_gudang`, `ket_produk`, `jumlah_enodes`, `Kategori_fsn`, `created_at`, `updated_at`) VALUES
+(5, 'MKP01', 'MKP Pak Tani', 6, '1648398757.jpg', 30, 1, 1, 1, 'Pupuk 1 KG', 6, 1, '2022-03-27 16:32:37', '2022-04-21 17:23:47'),
+(6, 'BRN001', 'Boron Plus', 6, '1648398839.jpg', 180, 1, 1, 1, 'Boron Plus', 5, 2, '2022-03-27 16:33:59', '2022-04-21 17:23:47'),
+(7, 'PR001', 'Panen Raya', 6, '1648424692.jpg', 120, 1, 1, 1, 'Panen Raya', 4, 1, '2022-03-27 23:44:52', '2022-04-21 17:23:47'),
+(8, 'test_001', 'testing', 9, '1650308797.png', 21, 4, 4, 1, 'dsadsasds', 5, 3, '2022-04-18 19:06:37', '2022-04-21 17:23:47');
 
 -- --------------------------------------------------------
 
@@ -211,28 +254,30 @@ CREATE TABLE `purchases` (
   `tgl_purchase` date NOT NULL,
   `id_produk` int(10) UNSIGNED NOT NULL,
   `qty_purchase` int(11) NOT NULL,
+  `expired` date DEFAULT NULL,
   `status` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `purchases`
 --
 
-INSERT INTO `purchases` (`id_purchase`, `tgl_purchase`, `id_produk`, `qty_purchase`, `status`, `created_at`, `updated_at`) VALUES
-(32, '2021-12-20', 5, 50, 0, '2022-03-27 21:31:52', '2022-03-27 21:31:52'),
-(33, '2022-01-20', 5, 50, 0, '2022-03-27 21:33:32', '2022-03-27 21:33:32'),
-(40, '2022-02-20', 5, 50, 0, '2022-03-27 22:00:02', '2022-03-27 22:00:02'),
-(45, '2022-03-20', 5, 50, 0, '2022-03-27 22:04:23', '2022-03-27 22:04:23'),
-(79, '2021-12-20', 6, 100, 0, '2022-03-27 23:31:00', '2022-03-27 23:31:00'),
-(81, '2022-01-20', 6, 50, 0, '2022-03-27 23:43:09', '2022-03-27 23:43:09'),
-(112, '2022-02-20', 7, 100, 0, '2022-03-28 11:16:55', '2022-03-28 11:16:55'),
-(113, '2022-03-20', 7, 100, 0, '2022-03-28 11:17:07', '2022-03-28 11:17:07'),
-(115, '2022-01-20', 7, 100, 0, '2022-04-04 08:54:03', '2022-04-04 08:54:03'),
-(116, '2021-12-20', 7, 100, 0, '2022-04-04 08:54:40', '2022-04-04 08:54:40'),
-(121, '2022-02-20', 6, 50, 0, '2022-04-07 21:33:42', '2022-04-07 21:33:42'),
-(122, '2022-03-20', 6, 100, 0, '2022-04-07 21:36:40', '2022-04-07 21:36:40');
+INSERT INTO `purchases` (`id_purchase`, `tgl_purchase`, `id_produk`, `qty_purchase`, `expired`, `status`, `created_at`, `updated_at`) VALUES
+(32, '2021-12-20', 5, 50, NULL, 1, '2022-03-27 21:31:52', '2022-04-19 17:10:30'),
+(33, '2022-01-20', 5, 50, NULL, 1, '2022-03-27 21:33:32', '2022-04-19 17:10:30'),
+(40, '2022-02-20', 5, 50, NULL, 1, '2022-03-27 22:00:02', '2022-04-19 17:10:30'),
+(45, '2022-03-20', 5, 50, NULL, 1, '2022-03-27 22:04:23', '2022-04-19 17:10:30'),
+(79, '2021-12-20', 6, 100, NULL, 1, '2022-03-27 23:31:00', '2022-04-19 17:10:30'),
+(81, '2022-01-20', 6, 50, NULL, 1, '2022-03-27 23:43:09', '2022-04-19 17:10:30'),
+(112, '2022-02-20', 7, 100, NULL, 1, '2022-03-28 11:16:55', '2022-04-19 17:10:30'),
+(113, '2022-03-20', 7, 100, NULL, 1, '2022-03-28 11:17:07', '2022-04-19 17:10:30'),
+(115, '2022-01-20', 7, 100, NULL, 1, '2022-04-04 08:54:03', '2022-04-19 17:10:30'),
+(116, '2021-12-20', 7, 100, NULL, 1, '2022-04-04 08:54:40', '2022-04-19 17:10:30'),
+(121, '2022-02-20', 6, 50, NULL, 1, '2022-04-07 21:33:42', '2022-04-19 17:10:30'),
+(122, '2022-03-20', 6, 100, NULL, 1, '2022-04-07 21:36:40', '2022-04-19 17:10:30'),
+(128, '2022-04-20', 7, 20, '2022-04-20', 0, '2022-04-20 08:48:57', '2022-04-20 08:48:57');
 
 --
 -- Triggers `purchases`
@@ -281,18 +326,22 @@ CREATE TABLE `record` (
 --
 
 INSERT INTO `record` (`id_record`, `id_produk`, `kode_produk`, `nama_produk`, `stokawal_produk`, `qty_masuk`, `qty_keluar`, `stokakhir_produk`, `Tanggal`, `Rata2_persediaan`, `TOR_partial`, `WSP`, `TOR`, `created_at`, `updated_at`) VALUES
-(20, 5, 'MKP01', 'MKP Pak Tani', 30, 50, 30, 50, '2021-12-20', 40, 0.75, 41.3333, 2.92742, '2022-03-27 21:31:52', '2022-04-07 21:36:56'),
-(21, 5, 'MKP01', 'MKP Pak Tani', 50, 50, 50, 50, '2022-01-20', 50, 1, 31, 3.90323, '2022-03-27 21:33:17', '2022-04-07 21:36:56'),
-(24, 5, 'MKP01', 'MKP Pak Tani', 50, 50, 60, 40, '2022-02-20', 45, 1.33333, 21, 5.7619, '2022-03-27 21:46:10', '2022-04-07 21:36:56'),
-(25, 5, 'MKP01', 'MKP Pak Tani', 40, 50, 60, 30, '2022-03-20', 35, 1.71429, 18.0833, 6.69124, '2022-03-27 22:04:23', '2022-04-07 21:36:56'),
-(45, 6, 'BRN001', 'Boron Plus', 296, 100, 96, 300, '2021-12-20', 298, 0.322148, 96.2292, 1.25742, '2022-03-27 23:31:00', '2022-04-07 21:36:56'),
-(48, 6, 'BRN001', 'Boron Plus', 300, 50, 100, 250, '2022-01-12', 275, 0.363636, 85.25, 1.41935, '2022-03-27 23:41:22', '2022-04-07 21:36:56'),
-(57, 7, 'PR001', 'Panen Raya', 104, 100, 96, 108, '2021-12-20', 106, 0.90566, 34.2292, 3.535, '2022-03-28 10:50:33', '2022-04-07 21:36:56'),
-(58, 7, 'PR001', 'Panen Raya', 108, 100, 106, 102, '2022-01-20', 105, 1.00952, 30.7075, 3.9404, '2022-03-28 11:16:39', '2022-04-07 21:36:56'),
-(59, 7, 'PR001', 'Panen Raya', 102, 100, 120, 82, '2022-02-20', 92, 1.30435, 21.4667, 5.63665, '2022-03-28 11:16:55', '2022-04-07 21:36:56'),
-(60, 7, 'PR001', 'Panen Raya', 82, 100, 82, 100, '2022-03-20', 91, 0.901099, 34.4024, 3.51719, '2022-03-28 11:17:07', '2022-04-07 21:36:56'),
-(63, 6, 'BRN001', 'Boron Plus', 250, 50, 120, 180, '2022-02-20', 215, 0.55814, 50.1667, 2.41196, '2022-04-07 21:33:42', '2022-04-07 21:36:56'),
-(64, 6, 'BRN001', 'Boron Plus', 180, 100, 100, 180, '2022-03-20', 180, 0.555556, 55.8, 2.16846, '2022-04-07 21:36:40', '2022-04-07 21:36:56');
+(20, 5, 'MKP01', 'MKP Pak Tani', 30, 50, 30, 50, '2021-12-20', 40, 0.75, 41.3333, 3.65323, '2022-03-27 21:31:52', '2022-04-21 17:23:47'),
+(21, 5, 'MKP01', 'MKP Pak Tani', 50, 50, 50, 50, '2022-01-20', 50, 1, 31, 4.87097, '2022-03-27 21:33:17', '2022-04-21 17:23:47'),
+(24, 5, 'MKP01', 'MKP Pak Tani', 50, 50, 60, 40, '2022-02-20', 45, 1.33333, 21, 7.19048, '2022-03-27 21:46:10', '2022-04-21 17:23:47'),
+(25, 5, 'MKP01', 'MKP Pak Tani', 40, 50, 60, 30, '2022-03-20', 35, 1.71429, 18.0833, 8.35023, '2022-03-27 22:04:23', '2022-04-21 17:23:47'),
+(45, 6, 'BRN001', 'Boron Plus', 296, 100, 96, 300, '2021-12-20', 298, 0.322148, 96.2292, 1.56917, '2022-03-27 23:31:00', '2022-04-21 17:23:47'),
+(48, 6, 'BRN001', 'Boron Plus', 300, 50, 100, 250, '2022-01-12', 275, 0.363636, 85.25, 1.77126, '2022-03-27 23:41:22', '2022-04-21 17:23:47'),
+(57, 7, 'PR001', 'Panen Raya', 104, 100, 96, 108, '2021-12-20', 106, 0.90566, 34.2292, 4.41144, '2022-03-28 10:50:33', '2022-04-21 17:23:47'),
+(58, 7, 'PR001', 'Panen Raya', 108, 100, 106, 102, '2022-01-20', 105, 1.00952, 30.7075, 4.91736, '2022-03-28 11:16:39', '2022-04-21 17:23:47'),
+(59, 7, 'PR001', 'Panen Raya', 102, 100, 120, 82, '2022-02-20', 92, 1.30435, 21.4667, 7.03416, '2022-03-28 11:16:55', '2022-04-21 17:23:47'),
+(60, 7, 'PR001', 'Panen Raya', 82, 100, 82, 100, '2022-03-20', 91, 0.901099, 34.4024, 4.38922, '2022-03-28 11:17:07', '2022-04-21 17:23:47'),
+(63, 6, 'BRN001', 'Boron Plus', 250, 50, 120, 180, '2022-02-20', 215, 0.55814, 50.1667, 3.00997, '2022-04-07 21:33:42', '2022-04-21 17:23:47'),
+(64, 6, 'BRN001', 'Boron Plus', 180, 100, 100, 180, '2022-03-20', 180, 0.555556, 55.8, 2.70609, '2022-04-07 21:36:40', '2022-04-21 17:23:47'),
+(65, 5, 'MKP01', 'MKP Pak Tani', 30, 0, 0, 30, '2022-04-12', 35, 1.71429, 18.0833, 8.35023, '2022-04-12 12:16:20', '2022-04-21 17:23:47'),
+(66, 6, 'BRN001', 'Boron Plus', 180, 0, 0, 180, '2022-04-20', 180, 0.555556, 55.8, 2.70609, '2022-04-19 17:10:00', '2022-04-21 17:23:47'),
+(67, 8, 'test_001', 'testing', 21, 0, 0, 21, '2022-04-20', 0, 0, 0, 0, '2022-04-19 18:39:58', '2022-04-21 17:23:47'),
+(68, 7, 'PR001', 'Panen Raya', 100, 20, 0, 120, '2022-04-20', 91, 0.901099, 34.4024, 4.38922, '2022-04-19 18:51:40', '2022-04-21 17:23:47');
 
 -- --------------------------------------------------------
 
@@ -316,18 +365,18 @@ CREATE TABLE `sells` (
 --
 
 INSERT INTO `sells` (`id_sell`, `tgl_sell`, `id_karyawan`, `id_produk`, `qty`, `status`, `created_at`, `updated_at`) VALUES
-(19, '2021-12-20', 14, 5, 30, 0, '2022-03-27 21:32:07', '2022-03-27 21:32:07'),
-(20, '2022-01-20', 14, 5, 50, 0, '2022-03-27 21:33:17', '2022-03-27 21:33:17'),
-(23, '2022-02-20', 14, 5, 60, 0, '2022-03-27 21:46:10', '2022-03-27 21:46:10'),
-(24, '2022-03-20', 14, 5, 60, 0, '2022-03-27 22:05:21', '2022-03-27 22:05:21'),
-(41, '2021-12-20', 14, 6, 96, 0, '2022-03-27 23:34:00', '2022-03-27 23:34:00'),
-(44, '2022-01-12', 14, 6, 100, 0, '2022-03-27 23:41:22', '2022-03-27 23:41:22'),
-(113, '2021-12-20', 14, 7, 96, 0, '2022-03-28 11:39:17', '2022-03-28 11:39:17'),
-(114, '2022-01-20', 14, 7, 106, 0, '2022-03-28 11:39:53', '2022-03-28 11:39:53'),
-(117, '2022-03-20', 14, 7, 82, 0, '2022-04-02 18:28:26', '2022-04-02 18:28:26'),
-(121, '2022-02-20', 14, 7, 120, 0, '2022-04-04 09:18:37', '2022-04-04 09:18:37'),
-(128, '2022-02-20', 14, 6, 120, 0, '2022-04-07 21:35:43', '2022-04-07 21:35:43'),
-(129, '2022-03-20', 14, 6, 100, 0, '2022-04-07 21:36:53', '2022-04-07 21:36:53');
+(19, '2021-12-20', 14, 5, 30, 1, '2022-03-27 21:32:07', '2022-04-12 12:15:40'),
+(20, '2022-01-20', 14, 5, 50, 1, '2022-03-27 21:33:17', '2022-04-12 12:15:40'),
+(23, '2022-02-20', 14, 5, 60, 1, '2022-03-27 21:46:10', '2022-04-12 12:15:40'),
+(24, '2022-03-20', 14, 5, 60, 1, '2022-03-27 22:05:21', '2022-04-12 12:15:40'),
+(41, '2021-12-20', 14, 6, 96, 1, '2022-03-27 23:34:00', '2022-04-12 12:15:40'),
+(44, '2022-01-12', 14, 6, 100, 1, '2022-03-27 23:41:22', '2022-04-12 12:15:40'),
+(113, '2021-12-20', 14, 7, 96, 1, '2022-03-28 11:39:17', '2022-04-12 12:15:40'),
+(114, '2022-01-20', 14, 7, 106, 1, '2022-03-28 11:39:53', '2022-04-12 12:15:40'),
+(117, '2022-03-20', 14, 7, 82, 1, '2022-04-02 18:28:26', '2022-04-12 12:15:40'),
+(121, '2022-02-20', 14, 7, 120, 1, '2022-04-04 09:18:37', '2022-04-12 12:15:40'),
+(128, '2022-02-20', 14, 6, 120, 1, '2022-04-07 21:35:43', '2022-04-12 12:15:40'),
+(129, '2022-03-20', 14, 6, 100, 1, '2022-04-07 21:36:53', '2022-04-12 12:15:40');
 
 --
 -- Triggers `sells`
@@ -417,7 +466,6 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `username`, `email`, `akses`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
 (4, 'Administrator', 'admin', 'admin@contoh.com', 'admin', '$2y$10$MnTwLh0DfW8NYyfF.eMaKelqZZkQpq4/RtW.2I.XU3aoOdlExVyDO', 'r3y0dUtQvuK55yr3m9YHxkXhKP80xSn1RDu5BTUexS3ojAKXcZG2c1tIHfep', '2019-03-27 09:18:02', '2019-11-28 02:18:04'),
-(8, 'M Siddik', 'siddik', 'siddik@contoh.com', 'operator', '$2y$10$Z0c.v7qIqwQzHK.CZRR.t.i39bJDF5qXJpLIVqv.tgr3CwvoLwwNa', NULL, '2020-01-06 02:39:05', '2020-01-06 02:39:05'),
 (9, 'Rizki ramadhan', 'rizmdhn', 'rizkir42@gmail.com', 'admin', '$2y$10$Jior7Fhdv5S/sIuSENVt5ed3ZBhQvF9Lf3LwpUja0Tb0YinDEJ1r.', NULL, '2022-03-27 16:24:02', '2022-03-27 16:24:02'),
 (10, 'operator', 'operator', 'operator@gmail.com', 'operator', '$2y$10$IlUhHUwf4kVYZDGJoBVikegIXljVhDHt12sMLt46ITUfEtmnggOUW', 'ZXxVWl2WsjPdFNBsD87eGRJUbEMkY271ALRpRP8WSduABPJARlbNKgsIJ3Dt', '2022-03-27 16:24:32', '2022-03-27 16:24:32');
 
@@ -459,6 +507,12 @@ ALTER TABLE `genders`
   ADD PRIMARY KEY (`id_gender`);
 
 --
+-- Indexes for table `gudang`
+--
+ALTER TABLE `gudang`
+  ADD PRIMARY KEY (`id_gudang`);
+
+--
 -- Indexes for table `jobs`
 --
 ALTER TABLE `jobs`
@@ -485,7 +539,8 @@ ALTER TABLE `products`
   ADD KEY `id_produk` (`id_produk`),
   ADD KEY `id_kategori` (`id_kategori`),
   ADD KEY `id_unit` (`id_unit`),
-  ADD KEY `id_supplier` (`id_supplier`);
+  ADD KEY `id_supplier` (`id_supplier`),
+  ADD KEY `id_gudang` (`id_gudang`);
 
 --
 -- Indexes for table `purchases`
@@ -545,7 +600,7 @@ ALTER TABLE `agamas`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id_kategori` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_kategori` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `employees`
@@ -558,6 +613,12 @@ ALTER TABLE `employees`
 --
 ALTER TABLE `genders`
   MODIFY `id_gender` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `gudang`
+--
+ALTER TABLE `gudang`
+  MODIFY `id_gudang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -575,25 +636,25 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id_produk` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_produk` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `id_purchase` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
+  MODIFY `id_purchase` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
 -- AUTO_INCREMENT for table `record`
 --
 ALTER TABLE `record`
-  MODIFY `id_record` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id_record` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `sells`
 --
 ALTER TABLE `sells`
-  MODIFY `id_sell` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
+  MODIFY `id_sell` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
