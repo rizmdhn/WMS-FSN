@@ -71,6 +71,7 @@ class ProductController extends Controller
       $products->id_supplier = $request->id_supplier;
       $products->stok_produk = $request->stok_produk;
       $products->id_unit     = $request->id_unit;
+      $products->jumlah_enodes     = $request->jumlah_enodes;
       $products->id_gudang    = $request->id_gudang;
       $products->ket_produk  = $request->ket_produk;
 
