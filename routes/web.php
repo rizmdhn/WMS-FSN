@@ -12,7 +12,6 @@ Route::any('register', function(){
 	return abort(404);
 });
 
-Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', 'HomeController@index');
 Route::post('/chart', 'HomeController@record')->name('chart');
 
@@ -65,7 +64,4 @@ Route::group(['middleware'=>'auth'], function(){
 	// Route::get('/user', 'UserController@index')->name('user.index')->middleware('akses.admin');
 	//=========================================================================
 
-	Route::get('/about', function(){
-		return view('gudang.about');
-	});
 });

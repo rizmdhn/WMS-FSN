@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\LOG;
 use App\Http\Requests;
 use App\Product;
 use App\Category;
+use App\Purchase;
 use App\gudang;
 use App\Unit;
 use App\Supplier;
@@ -98,6 +99,11 @@ class ProductController extends Controller
     public function show($id_produk)
     {
         $products = Product::findOrFail($id_produk);
+        $expired = Purchase::where('id_produk', $id_produk)->latest('tgl_purchase')->first();
+        if($expired != null){
+            $products['expired'] = $expired->expired;
+        }
+
         return view('gudang.product.show', ['products' => $products]);
     }
 
@@ -129,7 +135,7 @@ class ProductController extends Controller
         $products->id_supplier = $request->id_supplier;
         $products->stok_produk = $request->stok_produk;
         $products->id_unit     = $request->id_unit;
-        $products->id_gudang    = $request->id_gudang;
+        $products->id_gudang   = $request->id_gudang;
         $products->ket_produk  = $request->ket_produk;
 
         if($request->hasFile('image')){

@@ -69,9 +69,11 @@ class GudangController extends Controller
      * @param  \App\gudang  $gudang
      * @return \Illuminate\Http\Response
      */
-    public function edit(gudang $gudang)
+    public function edit($id_gudang)
     {
-        //
+        $gudang = gudang::findOrFail($id_gudang);
+        return view('gudang.gudang.edit', compact('gudang'));
+
     }
 
     /**
@@ -81,9 +83,24 @@ class GudangController extends Controller
      * @param  \App\gudang  $gudang
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, gudang $gudang)
+    public function update(Request $request, $id_gudang)
     {
-        //
+        $gudang = gudang::find($id_gudang);
+        $gudang->nama_gudang = $request->nama;
+        $gudang->Kapasitas_GT = $request->KapasitasGudangTotal;
+        $gudang->Kapasitas_F = $request->KapasitasBarangF;
+        $gudang->Kapasitas_N = $request->KapasitasBarangN;
+        $gudang->Kapasitas_S = $request->KapasitasBarangS;
+        $total  = $request->KapasitasBarangF + $request->KapasitasBarangN + $request->KapasitasBarangS;
+        if($total != $request->KapasitasGudangTotal){
+            session()->flash('status', 'Data tidak sesuai pada total kapasitas gudang');
+            return redirect('/gudang/'.$id_gudang.'/edit');
+        }
+        if($gudang->update()){
+            return redirect('gudang')->with('pesan', 'Data berhasil di update');
+        }else {
+           
+        }
     }
 
     /**

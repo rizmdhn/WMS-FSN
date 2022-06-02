@@ -39,7 +39,13 @@
 
                   <div class="form-group">
                     <label>Tanggal</label>
-                    <input required="" class="form-control form-control-sm" type="date" name="tgl_sell">
+                    @if(Auth::user()->akses == 'operator')
+                    <input required class="form-control form-control-sm" type="date" name="tgl_sell" min="<?php echo date("Y-m-d"); ?>">
+                    @elseif (Auth::user()->akses == 'admin')
+                    <input required class="form-control form-control-sm" type="date" name="tgl_sell">
+
+                    @endif
+
                   </div>
 
                   <div class="form-group">

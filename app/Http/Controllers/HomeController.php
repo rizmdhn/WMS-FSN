@@ -85,8 +85,8 @@ class HomeController extends Controller
             }
             dispatch(new checkrecord());
             $gudang = gudang::first();
-Log::info($recordpermonth);
-        return view('gudang.home',['pesanstock' => $stockalert,'pesanexpired' => $expiryalert, 'tanggal'=> $tanggal, 'chartdata' => $recordpermonth, 'product' => $product, 'gudang' => $gudang, 'pemakaian' => $TotalPemakaian]);
+            Log::info($recordpermonth);
+        return view('gudang.dashboard',['pesanstock' => $stockalert,'pesanexpired' => $expiryalert, 'tanggal'=> array_reverse($tanggal), 'chartdata' => $recordpermonth, 'product' => $product, 'gudang' => $gudang, 'pemakaian' => $TotalPemakaian]);
     }
 
     public function record(Request $request){

@@ -36,12 +36,15 @@
             <div class="card" style="width: 22rem;">
               <img class="card-img-top" src="{{asset('image/'.$products->image)}}" style="width: 100%;margin-bottom: 10px;">
               <div class="card-body">
+                
                 <p class="card-text"><b>{{ $products->kode_produk }} / {{ $products->nama_produk }}</b><br>
                   {{ $products->categories->nama_kategori }}<br>
                   Supplier : <b>{{ $products->suppliers->nama_supplier }}</b><br>
                   stok : {{ $products->stok_produk }} {{ $products->units->nama_unit }}<br>
-                  lokasi : {{ $products->lokasi }}<br>
-                  Keterangan : {{ $products->ket_produk }}
+                  lokasi : {{ $products->gudang->nama_gudang }}<br>
+                  Keterangan : {{ $products->ket_produk }}<br>
+                  <h4 class="text-danger">  Expired : {{ $products->expired }}</h4>
+
                 </p>
               </div>
             </div>

@@ -43,9 +43,6 @@
             <div class="box-body">
               @include('gudang/notification')
               <div style="margin-bottom: 10px;" class="print">
-                @if(Auth::user()->akses == 'admin')
-                <a href="{{ route('gudang.create') }}"> <button class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-plus"></i> Tambah data gudang</button></a>
-                @endif
               </div>
 
               <div style="margin-bottom: 10px;" class="print">
@@ -85,7 +82,7 @@
                     <td>{{ $item->Kapasitas_N }}</td>
                       @if(Auth::user()->akses == 'admin')
                     <td>
-                      <a href="supplier/{{$item->id_gudang}}/edit"><button class="btn btn-warning btn-xs">Edit</button></a>
+                      <a href="gudang/{{$item->id_gudang}}/edit"><button class="btn btn-warning btn-xs">Edit</button></a>
                       <button class="btn btn-danger btn-xs" data-delid={{$item->id_gudang}} data-toggle="modal" data-target="#delete"><i class="glyphicon glyphicon-trash"></i>Hapus</button>
                     </td>
                       @endif

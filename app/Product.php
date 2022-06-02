@@ -10,10 +10,8 @@ class Product extends Model
 	protected $guarded  = ['created_at', 'updated_at'];
 
 	public function categories(){
-
         return $this->belongsTo('App\Category', 'id_kategori');
     }
-
     public function units(){
 
         return $this->belongsTo('App\Unit', 'id_unit');
