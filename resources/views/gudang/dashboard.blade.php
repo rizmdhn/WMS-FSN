@@ -5,17 +5,12 @@
 
     @include('templates.head')
     <title>Sistem Informasi Pergudangan</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="http://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js" defer></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-    @include('templates.scripts')
 
 </head>
 
 
 <body>
+    @include('templates.scripts')
 
     <div class="d-flex" id="wrapper">
         <!-- Sidebar -->
@@ -39,7 +34,7 @@
                                 <div class="alert alert-danger" role="alert">
                                     <b>Stock Barang Menipis</b> :
                                     @foreach ($pesanstock as $item)
-                                        {{ $item }}
+                                       {{  $item  }}
                                     @endforeach
                                 </div>
                             @endif
@@ -126,7 +121,10 @@
     </div>
     <!-- /#wrapper -->
 
+<!-- Menu Toggle Script -->
+
     <script>
+        
         var myChart = new Chart();
         var resetCanvas = function() {
             $('#mychart').remove(); // this is my <canvas> element

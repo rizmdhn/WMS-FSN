@@ -36,6 +36,7 @@ Route::group(['middleware'=>'auth'], function(){
 	Route::post('/purchase', 'PurchaseController@store')->name('purchase.store');
 	Route::get('/purchase/update', 'PurchaseController@update')->name('purchase.update');
 	Route::delete('/purchase/{id_sell}', 'PurchaseController@destroy');
+	Route::delete('/purchase/notif/{id_sell}', 'PurchaseController@destroyNotif');
 	Route::get('/purchase/laporan', 'PurchaseController@report')->name('purchase.report');
 	//=========================================================================
 	Route::resource('/report2', 'Report2Controller');

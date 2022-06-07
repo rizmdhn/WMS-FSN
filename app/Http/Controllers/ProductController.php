@@ -99,12 +99,10 @@ class ProductController extends Controller
     public function show($id_produk)
     {
         $products = Product::findOrFail($id_produk);
-        $expired = Purchase::where('id_produk', $id_produk)->latest('tgl_purchase')->first();
-        if($expired != null){
-            $products['expired'] = $expired->expired;
-        }
+        $purchase = Purchase::where('id_produk', $id_produk)->where('status', 1)->OrderBy('tgl_purchase', 'desc')->get();
 
-        return view('gudang.product.show', ['products' => $products]);
+
+        return view('gudang.product.show', ['products' => $products, 'purchase' => $purchase]);
     }
 
     /**

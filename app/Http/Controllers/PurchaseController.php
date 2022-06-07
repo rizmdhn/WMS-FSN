@@ -14,14 +14,14 @@ use App\Sell;
 use Carbon\Carbon;
 use Cron\MonthField;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Http\RedirectResponse;
 class PurchaseController extends Controller
 {
 
     public function index()
     {
 
-        $purchases = Purchase::all()->where('status', '0');
+        $purchases = Purchase::all()->where('status', '0')->where('is_deleted', false);
 
         $products  = Product::all();
         $data = array(
@@ -68,9 +68,16 @@ class PurchaseController extends Controller
         $purchases = Purchase::find($id_purchase);
         $purchases->delete();
         dispatch(new checkrecord());
-        return redirect('purchase')->with('pesan', 'Barang masuk dibatalkan!');
+        return back()->with('pesan', 'Data telah dihapus!');
     }
-
+    public function destroyNotif($id_purchase)
+    {
+        $purchases = Purchase::find($id_purchase);
+        $purchases['is_deleted'] = true;
+        $purchases->save();
+        dispatch(new checkrecord());
+        return back()->with('pesan', 'Stok barang telah dihapus!');
+    }
 
     public function update()
     {

@@ -13,6 +13,7 @@
 </head>
 
 <body>
+    
     <div class="d-flex" id="wrapper">
         <!-- Sidebar -->
         @include('templates.sidebar')

@@ -62,10 +62,10 @@ class HomeController extends Controller
                        array_push($tanggal, $date);
                        }
                 }
-                $purchase = Purchase::where('expired' , '<=', $today)->where('id_produk' , $produk->id_produk)->get();  
+                $purchase = Purchase::where('expired' , '<=', $today)->where('id_produk' , $produk->id_produk)->where('is_deleted', false)->get();  
                 if($purchase->isNotEmpty()) {
                     foreach($purchase as $item){
-                        $expiryalert[$key] = $produk->nama_produk . ' ' . $produk->kode_produk . ' sejumlah ' . $item->qty_purchase; 
+                        $expiryalert[$key] = $produk->nama_produk . ' ' . $produk->kode_produk . ' sejumlah ' . $item->qty_purchase . ' |'; 
                     }
                 }
                 if($stock <= $minimum) {
