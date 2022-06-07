@@ -58,8 +58,16 @@
                     <td>
                       <a href="user/{{$users->id}}/edit"><button class="btn btn-warning btn-xs">Edit</button></a>
                       @if( $users->id != Auth::id() )
-                        <button class="btn btn-danger btn-xs" data-delid={{$users->id}} data-toggle="modal" data-target="#delete"><i class="glyphicon glyphicon-trash"></i> Hapus</button>
-                      @endif
+                      <form action="{{ url('user') }}/{{ $users->id }}"
+                        method="post" class="d-inline-block">
+                        {{ method_field('delete') }}
+                        {{ csrf_field() }}
+                        <input class="btn btn-danger btn-xs" type="submit" name="submit"
+                            value="Delete">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="_method" value="DELETE">
+                      </form>                      
+                    @endif
                     </td>
                   </tr>
                   @endforeach

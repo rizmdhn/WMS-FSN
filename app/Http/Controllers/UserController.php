@@ -144,9 +144,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request, $id)
     {
-        $users = User::find($request->id);
+        $users = User::find($id);
         $users->delete();
         return back()->with('pesan', 'Data berhasil dihapus');
     }
