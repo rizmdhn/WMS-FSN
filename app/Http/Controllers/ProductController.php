@@ -154,9 +154,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request,$id_produk)
     {
-      $products = Product::find($request->id_produk);
+      $products = Product::find($id_produk);
       File::delete('image/'.$products->image);
       $products->delete();
 

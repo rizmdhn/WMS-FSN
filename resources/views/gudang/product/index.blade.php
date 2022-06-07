@@ -89,8 +89,12 @@
                       <a href="product/{{$product->id_produk}}/show"><button class="btn btn-primary btn-sm">Detail</button></a>
                       @if(Auth::user()->akses == 'admin')
                         <a href="product/{{$product->id_produk}}/edit"><button class="btn btn-warning btn-sm">Edit</button></a>
-                        <button class="btn btn-danger btn-sm" data-delid={{$product->id_produk}} data-toggle="modal" data-target="#delete"><i class="glyphicon glyphicon-trash"></i> Hapus</button>
-                      @endif
+                        <form action="{{route('product.destroy', $product->id_produk)}}" method="post" class="d-inline-block">
+                          {{method_field('delete')}}
+                          {{csrf_field()}}
+                          <input type="submit" class="btn btn-danger btn-sm text-white" onclick="return confirm('Are you sure?')" value="Delete">
+                        </form>
+                        @endif
                     </td>
                   </tr>
                   @endforeach
