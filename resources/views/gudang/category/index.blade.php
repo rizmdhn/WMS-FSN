@@ -32,8 +32,13 @@
               <form action="{{ url('/category') }}" method="post">
                 <div class="form-group">
                   <label>Kategori</label>
-                  <!-- <input class="form-control" type="text" name="nama_kategori"> -->
-                  {!!Form::text('nama_kategori', null, ['class'=>'form-control'])!!}
+                  <input class="form-control" type="text" name="nama_kategori">
+                  <input type="checkbox" id="has_expired" name="has_expired" value="1">
+                  <label for="has_expired"> Barang memiliki tanggal kadaluarsa</label><br>
+
+
+                  {{-- {!!Form::text('nama_kategori', null, ['class'=>'form-control'])!!} --}}
+                 
                 </div>
                 <div class="form-group">
                   <input class="btn btn-primary" type="submit" name="submit" value="Tambahkan">
@@ -71,7 +76,11 @@
                     <td>{{ $categories->nama_kategori }}</td>
                     <td>
                       <a href="{{ url('category') }}/{{$categories->id_kategori}}/edit"><button class="btn btn-warning btn-xs">Edit</button></a>
-                      <button class="btn btn-danger btn-xs" data-delid={{$categories->id_kategori}} data-toggle="modal" data-target="#delete"><i class="glyphicon glyphicon-trash"></i> Hapus</button>
+                      <form action="{{ url('category') }}/{{ $categories->id_kategori }}" method="post" class="d-inline-block">
+                        {{ method_field('delete') }}
+                        {{ csrf_field() }}
+                        <input class="btn btn-danger btn-xs" type="submit" name="submit" value="Delete">
+                    </form>
                     </td>
                   </tr>
                   @endforeach

@@ -26,16 +26,28 @@
 				            <div class="box-body">
 				            	@include('gudang/validation')
 				            	@include('gudang/notification')
-				            	<form action="{{ url('/category') }}/{{ $categories->id_kategori }}" method="post">
+				            	<form action="{{ url('/category') }}/{{ $categories->id_kategori }}" method="POST">
+									{{csrf_field()}}
+									{{ method_field('PUT') }}
 				            		<div class="form-group">
 										<label>Kategori</label>
 										<input class="form-control" type="text" name="nama_kategori" value="{{ $categories->nama_kategori }}">
+										@if ($categories->has_expired)
+										<input type="checkbox" id="has_expired" name="has_expired" checked value="1">
+										<label for="has_expired"> Barang memiliki tanggal kadaluarsa</label><br>
+
+										@else
+										<input type="checkbox" id="has_expired" name="has_expired" value="1">
+										<label for="has_expired"> Barang memiliki tanggal kadaluarsa</label><br>
+
+										@endif
+
 									</div>								
 									<div class="form-group">
 										<input class="btn btn-primary" type="submit" name="submit" value="Simpan">
-										<input type="reset" class="btn btn-danger" value="Reset">
-										{{csrf_field()}}
-										<input type="hidden" name="_method" value="PUT">
+										<script>
+											document.write('<a href="' + document.referrer + '" class="btn btn-warning">Go Back</a>');
+										</script>
 									</div>
 				            	</form>
 				            </div>

@@ -167,7 +167,7 @@ class ProductController extends Controller
         $products = Product::findOrFail($id_produk);
         return response()->json([
             'success' => 'true',
-            'kategori' => $products->categories->nama_kategori,
+            'has_expired' => $products->categories->has_expired,
         ]);
     }
 

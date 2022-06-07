@@ -41,11 +41,14 @@ class CategoryController extends Controller
     {
         $this->validate($request, [
             'nama_kategori' => 'required',
+      
         ]);
 
         $categories = new Category;
-        $categories->id_kategori   = $request->id_kategori;
         $categories->nama_kategori = $request->nama_kategori;
+        if ($request->has('has_expired')) {
+            $categories->has_expired = $request->has_expired;
+        }
         $categories->save();
         // dd('kesini');
 
@@ -90,6 +93,7 @@ class CategoryController extends Controller
 
         $categories = Category::find($id_kategori);
         $categories->nama_kategori = $request->nama_kategori;
+        $categories->has_expired = $request->has_expired;
         $categories->save();
         return redirect('category')->with('pesan', 'Data berhasil di update');
     }
@@ -100,9 +104,9 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request, $id_kategori)
     {
-        $categories = Category::find($request->id_kategori);
+        $categories = Category::find($id_kategori);
         $categories->delete();
         return back()->with('pesan', 'Data berhasil dihapus');
     }

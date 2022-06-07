@@ -34,7 +34,7 @@
                                 <div class="alert alert-danger" role="alert">
                                     <b>Stock Barang Menipis</b> :
                                     @foreach ($pesanstock as $item)
-                                       {{  $item  }}
+                                        {{ $item }}
                                     @endforeach
                                 </div>
                             @endif
@@ -121,10 +121,9 @@
     </div>
     <!-- /#wrapper -->
 
-<!-- Menu Toggle Script -->
+    <!-- Menu Toggle Script -->
 
     <script>
-        
         var myChart = new Chart();
         var resetCanvas = function() {
             $('#mychart').remove(); // this is my <canvas> element
@@ -134,6 +133,10 @@
         };
         // Initialize 
         $(document).ready(function() {
+            $("#menu-toggle").click(function(e) {
+                e.preventDefault();
+                $("#wrapper").toggleClass("toggled");
+            });
             var valueSelected = $('#tanggal').val();
             var label = [
                 @foreach ($product as $item)
@@ -370,7 +373,6 @@
         });
     </script>
     <!-- Bootstrap core JavaScript -->
-    @include('templates.scripts')
     @include('templates.modal')
 
 </body>

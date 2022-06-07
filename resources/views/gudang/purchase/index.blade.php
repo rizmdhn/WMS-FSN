@@ -152,12 +152,11 @@
     <script>
         $('#id_produk').on('change', function(e) {
             const id = $('#id_produk').val();
-            console.log(id);
             $.ajax({
                 method: 'GET',
                 url: '/productcat/' + id,
                 success: function(response) {
-                    if (response.kategori == "PUPUK" || response.kategori == "BAHAN KIMIA (CAIR)") {
+                    if (response.has_expired) {
                         $("#expiry").css("display", "block");
                     } else {
                         $("#expiry").css("display", "none");
