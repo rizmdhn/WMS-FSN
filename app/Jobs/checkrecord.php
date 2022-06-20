@@ -76,5 +76,7 @@ class checkrecord implements ShouldQueue
             dispatch(new FSN());
             
         }
+        dispatch(new checkgudang());
+
     }
 }

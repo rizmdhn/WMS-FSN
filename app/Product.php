@@ -21,7 +21,7 @@ class Product extends Model
         return $this->belongsTo('App\Supplier', 'id_supplier');
     }
     public function gudang(){
-
         return $this->belongsTo('App\gudang', 'id_gudang');
     }
+  
 }

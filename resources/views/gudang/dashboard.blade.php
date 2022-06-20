@@ -59,7 +59,7 @@
                             <div id="containercanvas" style="height: 300px">
                                 <canvas id="myChart"></canvas>
                             </div>
-
+                            <br/>
                             <table id="table_id" class="w-100">
                                 <thead>
                                     <th>Kode Produk</th>
@@ -69,15 +69,44 @@
                                     <th>Jumlah Keluar</th>
                                     <th>Stok Akhir</th>
                                     <th>TOR</th>
-                                    <th>Kategori Barang</th>
                                 </thead>
                                 <tbody>
 
                                 </tbody>
+                               
+                            </table>
+                            <h5>Table Legend : </h5>
+                            <ul class="list-group list-group-horizontal" >
+                                <li class="list-group-item list-group-item-danger">Fast Moving</li>
+                                <li class="list-group-item list-group-item-warning">Slow Moving</li>
+                                <li class="list-group-item list-group-item-success">Not Moving</li>
+                            </ul>
+                            <br>
+                            <hr style=" border-top: 3px dashed  black;
+                            ">
+                            <br/>
+                            <h3 class="box-title">Hasil TOR 4 Bulanan</h3>
+                            <table id="table_produkFSN" class="w-100">
+                                <thead>
+                                    <th>Nama Produk</th>
+                                    <th>Kategori FSN</th>
+                                    <th>TOR 4 Bulan</th>
+                                </thead>
+                                <tbody>
+                                </tbody>
                             </table>
                             <br>
-                            <hr>
+                            <hr style=" border-top: 3px dashed black;
+                            ">
                             <h3 class="box-title">Kapasitas Gudang</h3>
+                            @if ($pesangudang != null)
+                                <div class="alert alert-danger" role="alert">
+                                    <b>Enodes Gudang Menipis</b> :
+                                    @foreach ($pesangudang as $item)
+                                        {{ $item }}
+                                    @endforeach
+                                </div>
+                            @endif
                             <table id="table_gudang" class="table table-bordered">
                                 <tbody>
                                     <tr>
@@ -86,19 +115,19 @@
                                     </tr>
                                     <tr>
                                         <th>Enodes Barang F</th>
-                                        <td>{{ $gudang->Kapasitas_F - $pemakaian['F'] }} /
+                                        <td>{{ $gudang->sisa_F }} /
                                             {{ $gudang->Kapasitas_F }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Enodes Barang S</th>
-                                        <td>{{ $gudang->Kapasitas_S - $pemakaian['S'] }} /
+                                        <td>{{ $gudang->sisa_S  }} /
                                             {{ $gudang->Kapasitas_S }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Enodse Barang N</th>
-                                        <td>{{ $gudang->Kapasitas_N - $pemakaian['N'] }} /
+                                        <td>{{ $gudang->sisa_N  }} /
                                             {{ $gudang->Kapasitas_N }}</td>
                                     </tr>
                                 </tbody>
@@ -138,30 +167,29 @@
                 $("#wrapper").toggleClass("toggled");
             });
             var valueSelected = $('#tanggal').val();
-            var label = [
-                @foreach ($product as $item)
-                    "{{ $item->nama_produk }}",
-                @endforeach
-            ]
+            var data_product = "{{ $product }}";
             var data = "{{ $chartdata }}";
             var data_gudang = "{{ $gudang }}";
             var dataset = JSON.parse(data.replace(/&quot;/g, '"'));
             var gudang = JSON.parse(data_gudang.replace(/&quot;/g, '"'));
+            var product = JSON.parse(data_product.replace(/&quot;/g, '"'));
             var databulan = dataset[valueSelected];
             const qty_keluar = [];
+            const nama_produk = [];
             const qty_masuk = [];
             const qty_stok = [];
             const qty_stokawal = [];
             for (var j in databulan) {
+                nama_produk.push(databulan[j].nama_produk);
                 qty_keluar.push(databulan[j].qty_keluar);
                 qty_stokawal.push(databulan[j].stokawal_produk);
                 qty_masuk.push(databulan[j].qty_masuk);
                 qty_stok.push(databulan[j].stokakhir_produk);
-                if (databulan[j].TOR > 3) {
+                if (databulan[j].TOR > 1) {
                     databulan[j]['kategori'] = 'F';
-                } else if (databulan[j].TOR > 1) {
+                } else if (databulan[j].TOR >= 0.33) {
                     databulan[j]['kategori'] = 'S';
-                } else {
+                } else if(databulan[j].TOR < 0.3){
                     databulan[j]['kategori'] = 'N';
                 }
             }
@@ -169,7 +197,7 @@
             myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: label,
+                    labels: nama_produk,
                     datasets: [{
                         label: 'Stok Awal',
                         data: qty_stokawal,
@@ -181,21 +209,21 @@
                         label: 'Kuantitas Keluar',
                         data: qty_keluar,
                         backgroundColor: [
-                            'rgba(54, 162, 235)',
+                            'rgba(255, 255, 0)',
                         ],
                         borderWidth: 3
                     }, {
                         label: 'Kuantitas Masuk',
                         data: qty_masuk,
                         backgroundColor: [
-                            'rgba(54, 162, 235)',
+                            'rgba(0, 162, 0)',
                         ],
                         borderWidth: 3
                     }, {
                         label: 'Stok Akhir',
                         data: qty_stok,
                         backgroundColor: [
-                            'rgba(54, 162, 235)',
+                            'rgba(255, 51, 51)',
                         ],
                         borderWidth: 3
                     }]
@@ -210,11 +238,32 @@
                     }
                 }
             });
+            $('#table_produkFSN').DataTable({
+                data : product,
+                info: true,
+                autowidth: false,
+                columns: [ {
+                        data: 'nama_produk'
+                    }, {
+                        data: 'Kategori_fsn',
+                        "render" : function (data, type, row, meta) {
+                            if (data == '1') {
+                                return 'F';
+                            } else if (data == '2') {
+                                return 'S';
+                            } else if (data == '3') {
+                                return 'N';
+                            }
+                        }
+                    }, {
+                        data : 'TOR4Months'
+                    }
+                ],
+            });
             $('#table_id').DataTable({
                 data: databulan,
                 info: true,
                 autowidth: false,
-
                 columns: [{
                         data: 'kode_produk'
                     }, {
@@ -229,8 +278,6 @@
                         data: 'stokakhir_produk'
                     }, {
                         data: 'TOR'
-                    }, {
-                        data: 'kategori'
                     },
 
                 ],
@@ -259,28 +306,30 @@
             resetCanvas();
             var optionSelected = $("option:selected", this);
             var valueSelected = this.value;
-            var label = [
-                @foreach ($product as $item)
-                    "{{ $item->nama_produk }}",
-                @endforeach
-            ]
+            // var label = [
+            //     @foreach ($product as $item)
+            //         "{{ $item->nama_produk }}",
+            //     @endforeach
+            // ]
             var data = "{{ $chartdata }}";
             var dataset = JSON.parse(data.replace(/&quot;/g, '"'));
             var databulan = dataset[valueSelected];
             const qty_keluar = [];
+            const nama_produk = [];
             const qty_masuk = [];
             const qty_stok = [];
             const qty_stokawal = [];
             for (var j in databulan) {
+                nama_produk.push(databulan[j].nama_produk);
                 qty_keluar.push(databulan[j].qty_keluar);
                 qty_stokawal.push(databulan[j].stokawal_produk);
                 qty_masuk.push(databulan[j].qty_masuk);
                 qty_stok.push(databulan[j].stokakhir_produk);
-                if (databulan[j].TOR > 3) {
+                if (databulan[j].TOR > 1) {
                     databulan[j]['kategori'] = 'F';
-                } else if (databulan[j].TOR > 1) {
+                } else if (databulan[j].TOR >= 0.33) {
                     databulan[j]['kategori'] = 'S';
-                } else {
+                } else if(databulan[j].TOR < 0.3){
                     databulan[j]['kategori'] = 'N';
                 }
             }
@@ -289,7 +338,7 @@
             myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: label,
+                    labels: nama_produk,
                     datasets: [{
                         label: 'Stok Awal',
                         data: qty_stokawal,
@@ -301,21 +350,21 @@
                         label: 'Kuantitas Keluar',
                         data: qty_keluar,
                         backgroundColor: [
-                            'rgba(54, 162, 235)',
+                            'rgba(255, 255, 0)',
                         ],
                         borderWidth: 3
                     }, {
                         label: 'Kuantitas Masuk',
                         data: qty_masuk,
                         backgroundColor: [
-                            'rgba(54, 162, 235)',
+                            'rgba(0, 162, 0)',
                         ],
                         borderWidth: 3
                     }, {
                         label: 'Stok Akhir',
                         data: qty_stok,
                         backgroundColor: [
-                            'rgba(54, 162, 235)',
+                            'rgba(255, 51, 51)',
                         ],
                         borderWidth: 3
                     }]
@@ -352,9 +401,7 @@
                     data: 'stokakhir_produk'
                 }, {
                     data: 'TOR'
-                }, {
-                    data: 'kategori'
-                }, ],
+                },],
                 "createdRow": function(row, data, dataIndex) {
                     if (data['kategori'] == "F") {
                         $(row).addClass('bg-danger');

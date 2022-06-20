@@ -36,6 +36,7 @@ class HomeController extends Controller
     {
         $stockalert = array();
         $expiryalert = array();
+        $gudangalert = array();
         $tanggal = array();
         $TotalPemakaian = collect([
             'F' => 0,
@@ -72,21 +73,21 @@ class HomeController extends Controller
                     $stockalert[$key] = $produk->nama_produk . ' ' . $produk->kode_produk; 
                 }
                 }else{
-                    
                 }
-                if($produk->Kategori_fsn == 1){
-                    $TotalPemakaian['F'] = $TotalPemakaian['F'] + $produk->stok_produk;
-                } elseif ($produk->Kategori_fsn == 2){
-                    $TotalPemakaian['S'] = $TotalPemakaian['S'] + $produk->stok_produk;
-                } elseif ($produk->Kategori_fsn == 3){
-                    $TotalPemakaian['N'] = $TotalPemakaian['N'] + $produk->stok_produk;
-                }
+           
 
             }
             dispatch(new checkrecord());
             $gudang = gudang::first();
-            Log::info($recordpermonth);
-        return view('gudang.dashboard',['pesanstock' => $stockalert,'pesanexpired' => $expiryalert, 'tanggal'=> array_reverse($tanggal), 'chartdata' => $recordpermonth, 'product' => $product, 'gudang' => $gudang, 'pemakaian' => $TotalPemakaian]);
+            if ($gudang->sisa_f <= 100){
+                $gudangalert['f'] = $gudang->nama_gudang . ' Kapasitas Barang Fast Menipis' ;
+            } else if ($gudang->sisa_s <= 100){
+                $gudangalert['s'] = $gudang->nama_gudang . ' Kapasitas Barang Slow Menipis' ;
+            } else if ($gudang->sisa_n <= 100){
+                $gudangalert['n'] = $gudang->nama_gudang . ' Kapasitas Barang Not Moving Menipis' ;
+            }
+             Log::info($gudangalert);
+        return view('gudang.dashboard',['pesanstock' => $stockalert,'pesanexpired' => $expiryalert, 'pesangudang' => $gudangalert, 'tanggal'=> array_reverse($tanggal), 'chartdata' => $recordpermonth, 'product' => $product, 'gudang' => $gudang]);
     }
 
     public function record(Request $request){

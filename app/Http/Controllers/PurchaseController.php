@@ -55,7 +55,6 @@ class PurchaseController extends Controller
                 Record::create($data);
             } else {
                 dispatch(new checkrecord());
-
             }
         };
 

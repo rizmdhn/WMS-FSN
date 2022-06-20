@@ -9,6 +9,7 @@ use App\Http\Requests;
 use App\Sell;
 use App\Employee;
 use App\Product;
+use Barryvdh\DomPDF;
 
 class ReportController extends Controller
 {
@@ -24,4 +25,6 @@ class ReportController extends Controller
         $sells->delete();
         return back()->with('pesan', 'Data berhasil dihapus');
     }
+   
+  
 }
