@@ -60,7 +60,7 @@ class checkrecord implements ShouldQueue
                     $totalsell = $totalsell + $total->qty;
                 }
                 $recordprod = Record::where([
-                    ['id_produk', '=', $produk->id_produk], ['tanggal', '<=',  $date]
+                    ['id_produk', '=', $produk->id_produk], ['tanggal', '<=',  $rec->Tanggal]
                 ])->orderby('tanggal', 'desc')->take(2)->get();
                 // ->whereMonth('tanggal','<=', $x)->whereYear('tanggal','<=', $year)
                 if ($recordprod->count() > 1) {

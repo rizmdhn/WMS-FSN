@@ -54,21 +54,15 @@
                                             <td>{{ $purchase->expired }}</td>
                                             <td>{{ $purchase->products->id_supplier }}</td>
                                             <td>{{ $purchase->products->ket_produk }}</td>
-                                            @if (Auth::user()->akses !== 'admin')
-                                                <td style="display: none;" class="none">
-                                                    <button style="display: none;" class="btn btn-danger btn-sm"
-                                                        data-delid={{ $purchase->id_purchase }} data-toggle="modal"
-                                                        data-target="#delete"><i class="glyphicon glyphicon-trash"></i>
-                                                        Hapus</button>
-                                                </td>
-                                            @else
-                                                <td class="none">
-                                                    <button class="btn btn-danger btn-sm"
-                                                        data-delid={{ $purchase->id_purchase }} data-toggle="modal"
-                                                        data-target="#delete"><i class="glyphicon glyphicon-trash"></i>
-                                                        Hapus</button>
-                                                </td>
-                                            @endif
+                                            <td>
+                                                <form action="{{ url('report2')}}/{{$purchase->id_purchase}}" method="post">
+                                                  {{method_field('delete')}}
+                                                  {{csrf_field()}}
+                                                  <input class="btn btn-danger btn-sm" type="submit" name="submit" value="Delete">
+                                                  {{csrf_field()}}
+                                                  <input type="hidden" name="_method" value="DELETE">
+                                                </form>
+                                              </td>                                                
                                         </tr>
                                     @endforeach
                                 </tbody>

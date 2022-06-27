@@ -82,11 +82,11 @@ class HomeController extends Controller
             dispatch(new checkgudang());
 
             $gudang = gudang::first();
-            if ($gudang->sisa_f <= 100){
+            if (($gudang->sisa_F/100) <= 0.2){
                 $gudangalert['f'] = $gudang->nama_gudang . ' Kapasitas Barang Fast Menipis' ;
-            } else if ($gudang->sisa_s <= 100){
+            } else if (($gudang->sisa_S/100) <= 0.2){
                 $gudangalert['s'] = $gudang->nama_gudang . ' Kapasitas Barang Slow Menipis' ;
-            } else if ($gudang->sisa_n <= 100){
+            } else if (($gudang->sisa_N/100) <= 0.2){
                 $gudangalert['n'] = $gudang->nama_gudang . ' Kapasitas Barang Not Moving Menipis' ;
             }
              Log::info($gudangalert);

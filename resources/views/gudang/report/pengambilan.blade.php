@@ -70,21 +70,15 @@
                                             <td>{{ $sell->qty }}</td>
                                             <td>{{ $sell->employees->sap }}</td>
                                             <td>{{ $sell->products->ket_produk }}</td>
-                                            @if (Auth::user()->akses !== 'admin')
-                                                <td style="display: none;" class="none">
-                                                    <button style="display: none;" class="btn btn-danger btn-sm"
-                                                        data-delid={{ $sell->id_sell }} data-toggle="modal"
-                                                        data-target="#delete"><i class="glyphicon glyphicon-trash"></i>
-                                                        Hapus</button>
-                                                </td>
-                                            @else
-                                                <td class="none">
-                                                    <button class="btn btn-danger btn-sm"
-                                                        data-delid={{ $sell->id_sell }} data-toggle="modal"
-                                                        data-target="#delete"><i class="glyphicon glyphicon-trash"></i>
-                                                        Hapus</button>
-                                                </td>
-                                            @endif
+                                            <td>
+                                                <form action="{{ url('report')}}/{{$sell->id_sell}}" method="post">
+                                                  {{method_field('delete')}}
+                                                  {{csrf_field()}}
+                                                  <input class="btn btn-danger btn-sm" type="submit" name="submit" value="Delete">
+                                                  {{csrf_field()}}
+                                                  <input type="hidden" name="_method" value="DELETE">
+                                                </form>
+                                              </td>         
                                         </tr>
                                     @endforeach
                                 </tbody>

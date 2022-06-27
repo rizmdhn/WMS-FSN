@@ -46,24 +46,24 @@ class FSN4month implements ShouldQueue
             if ($data['wsp'] != 0) {
                 $TOR = $totaldays / $data['wsp'];
                 $totalTOR = $totalTOR + $TOR;
-                if ($TOR > 1) {
-                    $update['kategori_fsn'] = '1';
-                } elseif ($TOR > 0.33) {
-                    $update['kategori_fsn'] = '2';
-                } else {
-                    $update['kategori_fsn'] = '3';
-                }
             }else {
                 $TOR = 0;
             }
             $input['TOR'] = $TOR;
             Record::where('id_record', $data['id_record'])->update($input);
-            Product::where('id_produk', $data['id_produk'])->update($update);
+         //   Product::where('id_produk', $data['id_produk'])->update($update);
          //   Log::info('FSN per record ' . $TOR . ' wsp '. $data['wsp']);
         }
       //  Log::info('TOR total per record ' . $totalTOR);
         $TOR4month = $totalTOR / 4;
         foreach($this->item as  $item){
+            if ($TOR4month > 1) {
+                $update['kategori_fsn'] = '1';
+            } elseif ($TOR4month > 0.33) {
+                $update['kategori_fsn'] = '2';
+            } else {
+                $update['kategori_fsn'] = '3';
+            }
             $update['TOR4Months'] = $TOR4month;
             Product::where('id_produk', $item['id_produk'])->update($update);
         }

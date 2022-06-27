@@ -19,9 +19,9 @@ class ReportController extends Controller
         return view('gudang.report.pengambilan', ['sells'=>$sells]);
     }
 
-    public function destroy(Request $request)
+    public function destroy($id_sell)
     {
-        $sells = Sell::find($request->id_sell);
+        $sells = Sell::find($id_sell);
         $sells->delete();
         return back()->with('pesan', 'Data berhasil dihapus');
     }

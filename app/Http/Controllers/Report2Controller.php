@@ -17,9 +17,9 @@ class Report2Controller extends Controller{
         return view('gudang.report2.index', ['purchases'=>$purchases]);
     }
 
-    public function destroy(Request $request)
+    public function destroy($id_purchase)
     {
-        $purchases = Purchase::find($request->id_purchase);
+        $purchases = Purchase::find($id_purchase);
         $purchases->delete();
         return back()->with('pesan', 'Data berhasil dihapus');
     }
