@@ -53,6 +53,7 @@ class PurchaseController extends Controller
                 $data['qty_masuk'] = $request->qty_purchase;
                 $data['stokakhir_produk'] = ($product->stok_produk);
                 Record::create($data);
+                dispatch(new checkrecord());
             } else {
                 dispatch(new checkrecord());
             }
@@ -89,5 +90,6 @@ class PurchaseController extends Controller
 
     public function report()
     {
+
     }
 }

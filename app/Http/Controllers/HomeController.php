@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Charts\MontlyViews;
 use App\gudang;
+use App\Jobs\checkgudang;
 use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
@@ -78,6 +79,8 @@ class HomeController extends Controller
 
             }
             dispatch(new checkrecord());
+            dispatch(new checkgudang());
+
             $gudang = gudang::first();
             if ($gudang->sisa_f <= 100){
                 $gudangalert['f'] = $gudang->nama_gudang . ' Kapasitas Barang Fast Menipis' ;
@@ -87,6 +90,7 @@ class HomeController extends Controller
                 $gudangalert['n'] = $gudang->nama_gudang . ' Kapasitas Barang Not Moving Menipis' ;
             }
              Log::info($gudangalert);
+
         return view('gudang.dashboard',['pesanstock' => $stockalert,'pesanexpired' => $expiryalert, 'pesangudang' => $gudangalert, 'tanggal'=> array_reverse($tanggal), 'chartdata' => $recordpermonth, 'product' => $product, 'gudang' => $gudang]);
     }
 

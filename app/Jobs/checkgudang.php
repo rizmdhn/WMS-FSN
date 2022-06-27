@@ -32,27 +32,31 @@ class checkgudang implements ShouldQueue
      */
     public function handle()
     {
-       $product = Product::all();
-       foreach ($product as $produk) {
-        $totalstokprod = $produk->stok_produk * $produk->jumlah_enodes;
-        $kategoriprod = $produk->Kategori_fsn;
-        $id_gudang = $produk->id_gudang;
-        $gudang = gudang::find($id_gudang);
-        if($gudang != null){
-            if ($kategoriprod == "1"){
-                $gudang['sisa_f'] = $gudang->sisa_f - $totalstokprod;
-            }else if ($kategoriprod == "2"){
-                $gudang['sisa_s'] = $gudang->sisa_s - $totalstokprod;
-            }else if ($kategoriprod == "3"){
-                $gudang['sisa_n'] = $gudang->sisa_n - $totalstokprod;
+        $product = Product::all();
+        $totalf = 0;
+        $totals = 0;
+        $totaln = 0;
+        foreach ($product as $produk) {
+            $totalstokprod = $produk->stok_produk * $produk->jumlah_enodes;
+            $kategoriprod = $produk->Kategori_fsn;
+            if ($kategoriprod == "1") {
+                $totalf =  $totalf + $totalstokprod;
+            } else if ($kategoriprod == "2") {
+                $totals  =  $totals + $totalstokprod;
+            } else if ($kategoriprod == "3") {
+                $totaln =  $totaln + $totalstokprod;
             }
-            $gudang->update();
 
             Log::info($kategoriprod);
 
+            Log::info('initotalproduct' . $produk->nama_produk . $produk->stok_produk);
         }
-        Log::info('initotalproduct' . $produk->nama_produk . $produk->stok_produk);
-    }
 
-}   
+        $gudang = gudang::first();
+        Log::info($gudang);
+        $gudang['sisa_F'] = $gudang['Kapasitas_F'] - $totalf;
+        $gudang['sisa_S'] = $gudang['Kapasitas_S'] - $totals;
+        $gudang['sisa_N'] = $gudang['Kapasitas_N'] - $totaln;
+        $gudang->update();
+    }
 }
