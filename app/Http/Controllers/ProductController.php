@@ -75,7 +75,7 @@ class ProductController extends Controller
       $products->jumlah_enodes     = $request->jumlah_enodes;
       $products->id_gudang    = $request->id_gudang;
       $products->ket_produk  = $request->ket_produk;
-
+      
       if($request->hasFile('image')){
         $file = $request->file('image');
         $fileName = time().'.'.$file->getClientOriginalExtension();

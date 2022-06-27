@@ -34,15 +34,15 @@
 				            			<div class="col-md-6 pl-3 pr-3">
 				            				<div class="form-group">
 												<label>Kode Barang</label>
-												<input required="" class="form-control" type="text" name="kode_produk">
+												<input required="" class="form-control" type="text" name="kode_produk" required>
 											</div>
 											<div class="form-group">
 												<label>Nama Produk</label>
-												<input required="" class="form-control" type="text" name="nama_produk">
+												<input required="" class="form-control" type="text" name="nama_produk" required>
 											</div>
 											<div class="form-group">
 												<label>Kategori</label>
-												<select class="form-control" name="id_kategori">
+												<select class="form-control" name="id_kategori" required>
 													<option>- Kategori Produk -</option>
 													@foreach($categories as $category)
 													<option value="{{$category->id_kategori}}">{{$category->nama_kategori}}</option>
@@ -51,7 +51,7 @@
 											</div>
 											<div class="form-group">
 												<label>Supplier</label>
-												<select class="form-control" name="id_supplier">
+												<select class="form-control" name="id_supplier" required>
 													<option>- Supplier -</option>
 													@foreach($suppliers as $supplier)
 													<option value="{{$supplier->id_supplier}}">{{$supplier->nama_supplier}}</option>
@@ -60,21 +60,21 @@
 											</div>
 											<div class="form-group">
 												<label>Foto Barang</label>
-									            <input type="file" name="image" value="" class="form-control">
+									            <input type="file" name="image" value="" class="form-control" required>
 								            </div>
 				            			</div>
 				            			<div class="col-md-6 pl-3 pr-3">
 											<div class="form-group">
 												<label>Stok</label>
-												<input required="" class="form-control" type="number" name="stok_produk">
+												<input required="" class="form-control" type="number" name="stok_produk" required>
 											</div>
 											<div class="form-group">
 												<label>Dimensi</label>
-												<input required="" class="form-control" type="number" name="jumlah_enodes">
+												<input required="" class="form-control" type="number" name="jumlah_enodes" required>
 											</div>
 											<div class="form-group">
 												<label>Satuan</label>
-												<select class="form-control" name="id_unit">
+												<select class="form-control" name="id_unit" required>
 													<option>-- Satuan Produk --</option>
 													@foreach($units as $unit)
 													<option value="{{ $unit->id_unit }}">{{ $unit->nama_unit }}</option>
@@ -83,7 +83,7 @@
 											</div>
 											<div class="form-group">
 												<label>Lokasi Barang</label>
-												<select class="form-control" name="id_gudang">
+												<select class="form-control" name="id_gudang" required>
 													<option>-- Lokasi gudang --</option>
 													@foreach($gudang as $item)
 													<option value="{{ $item->id_gudang }}">{{ $item->nama_gudang }}</option>
@@ -92,7 +92,7 @@
 											</div>
 											<div class="form-group">
 												<label>Keterangan</label>
-												<textarea class="form-control" type="text" name="ket_produk" rows="4" placeholder="Masukkan keterangan ..."></textarea>
+												<textarea class="form-control" type="text" name="ket_produk" rows="4" placeholder="Masukkan keterangan ..." required></textarea>
 												<!-- <input required="" class="form-control" type="text" name="stok_produk"> -->
 											</div>
 											<div>
