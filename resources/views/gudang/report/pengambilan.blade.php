@@ -68,7 +68,7 @@
                                             <td>{{ $sell->products->kode_produk }}</td>
                                             <td>{{ $sell->products->nama_produk }}</td>
                                             <td>{{ $sell->qty }}</td>
-                                            <td>{{ $sell->employees->sap }}</td>
+                                            <td>{{ $sell->users->name }}</td>
                                             <td>{{ $sell->products->ket_produk }}</td>
                                             <td>
                                                 <form action="{{ url('report')}}/{{$sell->id_sell}}" method="post">

@@ -12,6 +12,7 @@ use App\Jobs\checkrecord;
 use App\Product;
 use App\Purchase;
 use App\Record;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -27,15 +28,13 @@ class SellController extends Controller
         $sells = Sell::all();
         $sells = DB::table('sells')
                         ->join('products', 'sells.id_produk', '=', 'products.id_produk')
-                        ->join('employees', 'sells.id_karyawan', '=', 'employees.id_karyawan')
-                        ->select('sells.*', 'products.*', 'employees.*')
+                        ->join('users', 'sells.id_karyawan', '=', 'users.id')
+                        ->select('sells.*', 'products.*', 'users.*')
                         ->where('status','=', '0')
                         ->get();
 
-        $employees = Employee::all();
         $products  = Product::all();
         $data = array(
-            'employees'  => $employees,
             'products'   => $products,
         );
         return view('gudang.sell.index', ['sells'=>$sells], $data);
@@ -124,31 +123,7 @@ class SellController extends Controller
         $sells = Sell::find($id_sell);
         $sells->delete();
         dispatch(new checkrecord());
-        // $timestemp = $sells->tgl_sell;
-        // $month = Carbon::createFromFormat('Y-m-d', $timestemp)->month;
-        // $year = Carbon::createFromFormat('Y-m-d', $timestemp)->year;
-        // $record = Record::where('id_produk', $sells->id_produk)->WhereMonth('tanggal', $month)
-        // ->whereYear('tanggal', '=', $year)->first();
-        // $id = $record->id_record;
-        //     $totalsell = 0;
-        //     $totalpurc = 0;
-        //     $total_sell = Sell::where('id_produk', $sells->id_produk)->whereMonth('tgl_sell', $month)
-        //     ->whereYear('tgl_sell', '=', $year)->get();
-        //     $total_purchase = Purchase::where('id_produk', $sells->id_produk)->whereMonth('tgl_purchase', $month)
-        //     ->whereYear('tgl_purchase', '=', $year)->get();
-        //     foreach($total_purchase as $total ){
-        //         $totalpurc = $totalpurc + $total->qty_purchase;
-        //     }
-        //     foreach($total_sell as $total ){
-        //         $totalsell = $totalsell + $total->qty;
-        //     }
-        //     $product = Record::where([['id_produk','=', $sells->id_produk],
-        //     ['tanggal', '<=',  $timestemp]
-        //     ])->orderby('tanggal', 'desc')->take(2)->get();
-        //     $input['qty_masuk'] = $totalpurc;
-        //     $input['qty_keluar'] = $totalsell;
-        //     $input['stokakhir_produk'] = ($record->stokawal_produk + $totalpurc - $totalsell);
-        //     Record::where('id_record',$id)->update($input);
+        
         return redirect('sell')->with('pesan', 'pengambilan dibatalkan!');
     }
 

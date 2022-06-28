@@ -74,6 +74,7 @@ class PurchaseController extends Controller
     {
         $purchases = Purchase::find($id_purchase);
         $purchases['is_deleted'] = true;
+        
         $purchases->save();
         dispatch(new checkrecord());
         return back()->with('pesan', 'Stok barang telah dihapus!');
@@ -81,7 +82,6 @@ class PurchaseController extends Controller
 
     public function update()
     {
-
         $purchases = Purchase::where('status', '0');
         $purchases->update(['status' => '1']);
         return back()->with('pesan', 'Data dikirim ke laporan');

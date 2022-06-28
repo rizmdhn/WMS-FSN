@@ -35,18 +35,16 @@ class HomeController extends Controller
      */
     public function index()
     {
+        dispatch(new checkrecord());
+        dispatch(new checkgudang());
         $stockalert = array();
         $expiryalert = array();
         $gudangalert = array();
         $tanggal = array();
-        $TotalPemakaian = collect([
-            'F' => 0,
-            'S' => 0,
-            'N' => 0,
-        ]);
         $product = Product::all();
         $today =  Carbon::now()->format('Y-m-d');
         $recordpermonth = collect();
+        $datatable = collect();
             foreach($product as $key =>$produk){
                 $records = Record::where('id_produk' , $produk->id_produk)->get();
                 if($records->isNotEmpty()){
@@ -56,14 +54,13 @@ class HomeController extends Controller
                     foreach($records as $item){
                         $month =  Carbon::createFromFormat('Y-m-d', $item->Tanggal)->month;
                         $year =  Carbon::createFromFormat('Y-m-d', $item->Tanggal)->year;
-                        $date = $month .'-'.$year;
-                        $permonthrecord = Record::whereMonth('tanggal',$month)->whereYear('tanggal', $year)->get();
-                        $recordpermonth->put($date, $permonthrecord);
-                       if(in_array($date, $tanggal)){
+                        $date = $year .'-'. $month;
+                    if(in_array($date, $tanggal)){
                        }else{
                        array_push($tanggal, $date);
                        }
                 }
+               
                 $purchase = Purchase::where('expired' , '<=', $today)->where('id_produk' , $produk->id_produk)->where('is_deleted', false)->get();  
                 if($purchase->isNotEmpty()) {
                     foreach($purchase as $item){
@@ -78,8 +75,22 @@ class HomeController extends Controller
            
 
             }
-            dispatch(new checkrecord());
-            dispatch(new checkgudang());
+            foreach($tanggal as $tgl){
+                $items = collect();
+                $yearandmonth = explode('-', $tgl);
+                $permonthrecord = Record::whereMonth('tanggal',$yearandmonth[1])->whereYear('tanggal', $yearandmonth[0])->get();
+                $datatable->put($tgl, $permonthrecord);
+                foreach ($permonthrecord as $key => $item) {
+                    if ($item->qty_keluar > 0 || $item->qty_masuk > 0) {
+                        $items->put($key,$item);
+                    } 
+                }
+                $recordpermonth->put($tgl, $items);
+                Log::info($recordpermonth);
+
+
+            }
+
 
             $gudang = gudang::first();
             if (($gudang->sisa_F/100) <= 0.2){
@@ -91,7 +102,7 @@ class HomeController extends Controller
             }
              Log::info($gudangalert);
 
-        return view('gudang.dashboard',['pesanstock' => $stockalert,'pesanexpired' => $expiryalert, 'pesangudang' => $gudangalert, 'tanggal'=> array_reverse($tanggal), 'chartdata' => $recordpermonth, 'product' => $product, 'gudang' => $gudang]);
+        return view('gudang.dashboard',['pesanstock' => $stockalert,'pesanexpired' => $expiryalert, 'pesangudang' => $gudangalert, 'tanggal'=> array_reverse($tanggal), 'chartdata' => $recordpermonth, 'tabledata' => $datatable,'product' => $product, 'gudang' => $gudang]);
     }
 
     public function record(Request $request){

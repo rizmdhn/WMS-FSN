@@ -48,7 +48,6 @@
                                     <p class="card-text"><b>{{ $products->kode_produk }} /
                                             {{ $products->nama_produk }}</b><br>
                                         {{ $products->categories->nama_kategori }}<br>
-                                        Supplier : <b>{{ $products->suppliers->nama_supplier }}</b><br>
                                         stok : {{ $products->stok_produk }} {{ $products->units->nama_unit }}<br>
                                         lokasi : {{ $products->gudang->nama_gudang }}<br>
                                         Keterangan : {{ $products->ket_produk }}<br>

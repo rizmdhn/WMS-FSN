@@ -68,7 +68,6 @@ class checkrecord implements ShouldQueue
                 } else {
                     $input['stokawal_produk'] = $recordprod[0]->stokawal_produk;
                 }
-                Log::info("checkrecord" . $recordprod);
                 $input['qty_masuk'] = $totalpurc;
                 $input['qty_keluar'] = $totalsell;
                 $input['stokakhir_produk'] = ($input['stokawal_produk'] + $totalpurc - $totalsell);

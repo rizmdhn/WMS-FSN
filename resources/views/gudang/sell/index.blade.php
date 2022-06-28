@@ -51,10 +51,11 @@
                   <div class="form-group">
                     <label>Pengambil</label>
                     <select class="form-control form-control-sm" name="id_karyawan">
-                      <option>- SAPid -</option>
-                      @foreach($employees as $employee)
-                      <option value="{{$employee->id_karyawan}}">{{$employee->sap}}</option>
-                      @endforeach
+                      @auth
+                      <option value="{{Auth::user()->id}}">
+                        {{ Auth::user()->name }}
+                        @endauth
+                     </option>
                     </select>
                   </div>
 
@@ -107,7 +108,7 @@
                     <td>{{ $sell->tgl_sell }}</td>
                     <td>{{ $sell->kode_produk }}</td>
                     <td>{{ $sell->nama_produk }}</td>
-                    <td>{{ $sell->nama_karyawan }}</td>
+                    <td>{{ $sell->name }}</td>
                     <td>{{ $sell->qty }}</td>
 
                     <td>

@@ -170,11 +170,14 @@
             var valueSelected = $('#tanggal').val();
             var data_product = "{{ $product }}";
             var data = "{{ $chartdata }}";
+            var tabledata = "{{ $tabledata }}";
             var data_gudang = "{{ $gudang }}";
             var dataset = JSON.parse(data.replace(/&quot;/g, '"'));
+            var tabledataset = JSON.parse(tabledata.replace(/&quot;/g, '"'));
             var gudang = JSON.parse(data_gudang.replace(/&quot;/g, '"'));
             var product = JSON.parse(data_product.replace(/&quot;/g, '"'));
             var databulan = dataset[valueSelected];
+            var tabledatabulan = tabledataset[valueSelected];
             const qty_keluar = [];
             const nama_produk = [];
             const qty_masuk = [];
@@ -193,6 +196,7 @@
                 } else if(databulan[j].TOR < 0.3){
                     databulan[j]['kategori'] = 'N';
                 }
+               
             }
             const ctx = document.getElementById('myChart');
             myChart = new Chart(ctx, {
@@ -276,7 +280,7 @@
                 },
             });
             $('#table_id').DataTable({
-                data: databulan,
+                data: tabledatabulan,
                 info: true,
                 autowidth: false,
                 columns: [{
@@ -314,8 +318,13 @@
             //     @endforeach
             // ]
             var data = "{{ $chartdata }}";
+            var tabledata = "{{ $tabledata }}";
             var dataset = JSON.parse(data.replace(/&quot;/g, '"'));
+            console.log(dataset);
+
+            var tabledataset = JSON.parse(tabledata.replace(/&quot;/g, '"'));
             var databulan = dataset[valueSelected];
+            var tabledatabulan = tabledataset[valueSelected];
             const qty_keluar = [];
             const nama_produk = [];
             const qty_masuk = [];
@@ -327,13 +336,6 @@
                 qty_stokawal.push(databulan[j].stokawal_produk);
                 qty_masuk.push(databulan[j].qty_masuk);
                 qty_stok.push(databulan[j].stokakhir_produk);
-                if (databulan[j].TOR > 1) {
-                    databulan[j]['kategori'] = 'F';
-                } else if (databulan[j].TOR >= 0.33) {
-                    databulan[j]['kategori'] = 'S';
-                } else if(databulan[j].TOR < 0.3){
-                    databulan[j]['kategori'] = 'N';
-                }
             }
             const ctx = document.getElementById('myChart');
 
@@ -384,7 +386,7 @@
             $('#table_id').DataTable().destroy();
 
             $('#table_id').DataTable({
-                data: databulan,
+                data: tabledatabulan,
                 autowidth: true,
                 responsive: true,
                 info: true,

@@ -35,7 +35,6 @@
                                         <th>Nama Barang</th>
                                         <th>Jumlah</th>
                                         <th>Expired</th>
-                                        <th>Kode Supplier</th>
                                         <th>Keterangan</th>
                                         @if (Auth::user()->akses !== 'admin')
                                             <th style="display: none;" class="none">Action</th>
@@ -52,7 +51,6 @@
                                             <td>{{ $purchase->products->nama_produk }}</td>
                                             <td>{{ $purchase->qty_purchase }}</td>
                                             <td>{{ $purchase->expired }}</td>
-                                            <td>{{ $purchase->products->id_supplier }}</td>
                                             <td>{{ $purchase->products->ket_produk }}</td>
                                             <td>
                                                 <form action="{{ url('report2')}}/{{$purchase->id_purchase}}" method="post">

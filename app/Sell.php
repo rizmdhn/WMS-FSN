@@ -9,9 +9,9 @@ class Sell extends Model{
     protected $primaryKey = 'id_sell';
 	protected $guarded  = ['created_at', 'updated_at'];
 
-	public function employees(){
+	public function users(){
 
-        return $this->belongsTo('App\Employee', 'id_karyawan');
+        return $this->belongsTo('App\User', 'id_karyawan', 'id');
     }
 
     public function products(){
