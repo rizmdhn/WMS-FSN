@@ -100,8 +100,6 @@ class ProductController extends Controller
     {
         $products = Product::findOrFail($id_produk);
         $purchase = Purchase::where('id_produk', $id_produk)->where('status', 1)->OrderBy('tgl_purchase', 'desc')->get();
-
-
         return view('gudang.product.show', ['products' => $products, 'purchase' => $purchase]);
     }
 

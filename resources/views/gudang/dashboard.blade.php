@@ -75,12 +75,6 @@
                                 </tbody>
                                
                             </table>
-                            <h5>Table Legend : </h5>
-                            <ul class="list-group list-group-horizontal" >
-                                <li class="list-group-item list-group-item-danger">Fast Moving</li>
-                                <li class="list-group-item list-group-item-warning">Slow Moving</li>
-                                <li class="list-group-item list-group-item-success">Not Moving</li>
-                            </ul>
                             <br>
                             <hr style=" border-top: 3px dashed  black;
                             ">
@@ -95,6 +89,12 @@
                                 <tbody>
                                 </tbody>
                             </table>
+                            <h5>Table Legend : </h5>
+                            <ul class="list-group list-group-horizontal" >
+                                <li class="list-group-item list-group-item-danger">Fast Moving</li>
+                                <li class="list-group-item list-group-item-warning">Slow Moving</li>
+                                <li class="list-group-item list-group-item-success">Not Moving</li>
+                            </ul>
                             <br>
                             <hr style=" border-top: 3px dashed black;
                             ">
@@ -132,6 +132,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            
                             {{-- @endforeach --}}
                         </div>
                         <!-- /.box-body -->
@@ -259,6 +260,20 @@
                         data : 'TOR4Months'
                     }
                 ],
+                "createdRow": function(row, data, dataIndex) {
+                    if (data['Kategori_fsn'] == "1") {
+                        $(row).addClass('bg-danger');
+                        $(row).addClass('text-white');
+                    }
+                    if (data['Kategori_fsn'] == "2") {
+                        $(row).addClass('bg-warning');
+                        $(row).addClass('text-white');
+                    }
+                    if (data['Kategori_fsn'] == "3") {
+                        $(row).addClass('bg-success');
+                        $(row).addClass('text-white');
+                    }
+                },
             });
             $('#table_id').DataTable({
                 data: databulan,
@@ -281,20 +296,7 @@
                     },
 
                 ],
-                "createdRow": function(row, data, dataIndex) {
-                    if (data['kategori'] == "F") {
-                        $(row).addClass('bg-danger');
-                        $(row).addClass('text-white');
-                    }
-                    if (data['kategori'] == "S") {
-                        $(row).addClass('bg-success');
-                        $(row).addClass('text-white');
-                    }
-                    if (data['kategori'] == "N") {
-                        $(row).addClass('bg-warning');
-                        $(row).addClass('text-white');
-                    }
-                },
+               
 
             });
 
@@ -402,20 +404,7 @@
                 }, {
                     data: 'TOR'
                 },],
-                "createdRow": function(row, data, dataIndex) {
-                    if (data['kategori'] == "F") {
-                        $(row).addClass('bg-danger');
-                        $(row).addClass('text-white');
-                    }
-                    if (data['kategori'] == "S") {
-                        $(row).addClass('bg-success');
-                        $(row).addClass('text-white');
-                    }
-                    if (data['kategori'] == "N") {
-                        $(row).addClass('bg-warning');
-                        $(row).addClass('text-white');
-                    }
-                },
+               
             });
         });
     </script>
