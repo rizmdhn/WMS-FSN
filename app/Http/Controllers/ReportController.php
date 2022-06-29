@@ -14,7 +14,6 @@ use Barryvdh\DomPDF;
 class ReportController extends Controller
 {
     public function index(){
-
     	$sells = Sell::all()->where('status', '1');
         return view('gudang.report.pengambilan', ['sells'=>$sells]);
     }

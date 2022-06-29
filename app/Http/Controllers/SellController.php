@@ -23,21 +23,21 @@ class SellController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(){
+    public function index()
+    {
 
         $sells = Sell::all();
         $sells = DB::table('sells')
-                        ->join('products', 'sells.id_produk', '=', 'products.id_produk')
-                        ->join('users', 'sells.id_karyawan', '=', 'users.id')
-                        ->select('sells.*', 'products.*', 'users.*')
-                        ->where('status','=', '0')
-                        ->get();
-
+            ->join('products', 'sells.id_produk', '=', 'products.id_produk')
+            ->join('users', 'sells.id_karyawan', '=', 'users.id')
+            ->select('sells.*', 'products.*', 'users.*')
+            ->where('status', '=', '0')
+            ->get();
         $products  = Product::all();
         $data = array(
             'products'   => $products,
         );
-        return view('gudang.sell.index', ['sells'=>$sells], $data);
+        return view('gudang.sell.index', ['sells' => $sells], $data);
     }
 
     /**
@@ -56,37 +56,38 @@ class SellController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $stock = Product::where('id_produk', $request->id_produk)->first();
-        if($request->qty > $stock->stok_produk){
+        if ($request->qty > $stock->stok_produk) {
             return redirect('sell')->with('pesan', 'Stok tidak cukup!');
         }
-        if(Sell::create($request->all())){
+        if (Sell::create($request->all())) {
             $timestemp = $request->tgl_sell;
-        $month = Carbon::createFromFormat('Y-m-d', $timestemp)->month;
-        $year = Carbon::createFromFormat('Y-m-d', $timestemp)->year;
+            $month = Carbon::createFromFormat('Y-m-d', $timestemp)->month;
+            $year = Carbon::createFromFormat('Y-m-d', $timestemp)->year;
 
-         $record = Record::where('id_produk', $request->id_produk)->WhereMonth('tanggal', $month)
-         ->whereYear('tanggal', '=', $year)->first();
-         $recordlast = Record::where('id_produk', $request->id_produk)->WhereMonth('tanggal', ($month-1))
-         ->whereYear('tanggal', '=', $year)->first();
-         if(is_null($record)){
-            $product = Product::where('id_produk', $request->id_produk)->first();
-            $data['id_produk'] = $product->id_produk;
-            $data['kode_produk'] = $product->kode_produk;
-            $data['nama_produk'] = $product->nama_produk;
-            if(is_null($recordlast)){
-                $data['stokawal_produk'] = $product->stok_produk + $request->qty;
-            }else{
-                $data['stokawal_produk'] = $recordlast->stokakhir_produk;
+            $record = Record::where('id_produk', $request->id_produk)->WhereMonth('tanggal', $month)
+                ->whereYear('tanggal', '=', $year)->first();
+            $recordlast = Record::where('id_produk', $request->id_produk)->WhereMonth('tanggal', ($month - 1))
+                ->whereYear('tanggal', '=', $year)->first();
+            if (is_null($record)) {
+                $product = Product::where('id_produk', $request->id_produk)->first();
+                $data['id_produk'] = $product->id_produk;
+                $data['kode_produk'] = $product->kode_produk;
+                $data['nama_produk'] = $product->nama_produk;
+                if (is_null($recordlast)) {
+                    $data['stokawal_produk'] = $product->stok_produk + $request->qty;
+                } else {
+                    $data['stokawal_produk'] = $recordlast->stokakhir_produk;
+                }
+                $data['qty_keluar'] = $request->qty;
+                $data['tanggal'] = $timestemp;
+                $data['stokakhir_produk'] = ($product->stok_produk - $request->qty_purchase);
+                Record::create($data);
+            } else {
+                dispatch(new checkrecord());
             }
-            $data['qty_keluar'] = $request->qty;
-            $data['tanggal'] = $timestemp;
-            $data['stokakhir_produk'] = ($product->stok_produk - $request->qty_purchase);
-            Record::create($data);
-         }else{
-             dispatch(new checkrecord());
-         }
         };
         return redirect('sell')->with('pesan', 'Data berhasil ditambahkan');
     }
@@ -119,11 +120,11 @@ class SellController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id_sell){
+    public function destroy($id_sell)
+    {
         $sells = Sell::find($id_sell);
         $sells->delete();
         dispatch(new checkrecord());
-        
         return redirect('sell')->with('pesan', 'pengambilan dibatalkan!');
     }
 
@@ -134,16 +135,41 @@ class SellController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(){
-        
+    public function update()
+    {
+
         $sells = Sell::where('status', '0');
-        $sells->update(['status'=>'1']);
+        $sells->update(['status' => '1']);
         return back()->with('pesan', 'Data dikirim ke laporan');
     }
-    
 
-    public function report(){
+    public function getKehadirandatacustomDate(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'start_date' => [
+                'required',
+                'date'
+            ],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => 'Validation Error : ' . $validator->errors()
+            ], 422);
+        }
+        $startdate = Carbon::parse($request['start_date'])->format('Y-m-d');
+        $enddate = Carbon::parse($request['end_date'])->format('Y-m-d');
+        $data = Kehadiran::whereDate('created_at', '>=', $startdate)
+            ->whereDate('created_at', '<=', $enddate)
+            ->get();
+        return response()->json([
+            "success" => true,
+            "total" => $data->count(),
+            "start_date" => $startdate,
+            "end_date" => $enddate,
+            "data" => $data,
 
-        
+        ], 200);
     }
 }

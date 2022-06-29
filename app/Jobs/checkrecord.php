@@ -73,8 +73,8 @@ class checkrecord implements ShouldQueue
                 $input['stokakhir_produk'] = ($input['stokawal_produk'] + $totalpurc - $totalsell);
                 Record::where('id_record', $recordprod[0]->id_record)->update($input);
             }
-            dispatch(new FSN());
         }
+        dispatch(new FSN());
         dispatch(new checkgudang());
     }
 }
