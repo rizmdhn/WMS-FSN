@@ -15,6 +15,7 @@ use App\Record;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class SellController extends Controller
 {
@@ -160,8 +161,8 @@ class SellController extends Controller
         }
         $startdate = Carbon::parse($request['start_date'])->format('Y-m-d');
         $enddate = Carbon::parse($request['end_date'])->format('Y-m-d');
-        $data = Kehadiran::whereDate('created_at', '>=', $startdate)
-            ->whereDate('created_at', '<=', $enddate)
+        $data = Sell::whereDate('tanggal', '>=', $startdate)
+            ->whereDate('tanggal', '<=', $enddate)
             ->get();
         return response()->json([
             "success" => true,

@@ -83,7 +83,6 @@
                       @if(Auth::user()->akses == 'admin')
                     <td>
                       <a href="gudang/{{$item->id_gudang}}/edit"><button class="btn btn-warning btn-xs">Edit</button></a>
-                      <button class="btn btn-danger btn-xs" data-delid={{$item->id_gudang}} data-toggle="modal" data-target="#delete"><i class="glyphicon glyphicon-trash"></i>Hapus</button>
                     </td>
                       @endif
                   </tr>
