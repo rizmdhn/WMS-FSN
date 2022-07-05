@@ -31,7 +31,9 @@ Route::group(['middleware'=>'auth'], function(){
 	Route::get('/sell/laporan', 'SellController@report')->name('sell.report');
 	//=========================================================================
 	Route::resource('/report', 'ReportController');
-	Route::get('/sell/laporan/pdf', 'ReportController@exportPDF')->name('sell.report.pdf');
+	Route::post('/report-export', 'ReportController@getreportdatacustomDate')->name('report.export');
+	Route::post('/report2-export', 'Report2Controller@getreportdatacustomDate')->name('report2.export');
+
 	//=========================================================================
 	Route::get('/purchase', 'PurchaseController@index')->name('purchase.index');
 	Route::post('/purchase', 'PurchaseController@store')->name('purchase.store');

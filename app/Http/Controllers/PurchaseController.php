@@ -15,6 +15,8 @@ use Carbon\Carbon;
 use Cron\MonthField;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+
 class PurchaseController extends Controller
 {
 
@@ -74,8 +76,39 @@ class PurchaseController extends Controller
     {
         $purchases = Purchase::find($id_purchase);
         $purchases['is_deleted'] = true;
-        
-        $purchases->save();
+        $date = Carbon::now()->format('Y-m-d');
+        Log::info($date);
+        if($purchases->save()){
+            $input['tgl_sell'] = $date;
+            $input['id_karyawan'] = Auth::user()->id;
+            $input['id_produk'] = $purchases->id_produk;
+            $input['qty'] = $purchases->qty_purchase;
+            $input['status'] = 1;
+            if (Sell::create($input)) {
+                $month = Carbon::createFromFormat('Y-m-d', $date)->month;
+                $year = Carbon::createFromFormat('Y-m-d', $date)->year;
+    
+                $record = Record::where('id_produk', $purchases->id_produk)->WhereMonth('tanggal', $month)
+                    ->whereYear('tanggal', '=', $year)->first();
+                $recordlast = Record::where('id_produk',  $purchases->id_produk)->WhereMonth('tanggal', ($month - 1))
+                    ->whereYear('tanggal', '=', $year)->first();
+                if (is_null($record)) {
+                    $product = Product::where('id_produk',  $purchases->id_produk)->first();
+                    $data['id_produk'] = $product->id_produk;
+                    $data['kode_produk'] = $product->kode_produk;
+                    $data['nama_produk'] = $product->nama_produk;
+                    if (is_null($recordlast)) {
+                        $data['stokawal_produk'] = $product->stok_produk + $purchases->qty_purchase;
+                    } else {
+                        $data['stokawal_produk'] = $recordlast->stokakhir_produk;
+                    }
+                    $data['qty_keluar'] = $purchases->qty_purchase;
+                    $data['tanggal'] = Carbon::now();
+                    $data['stokakhir_produk'] = ($product->stok_produk - $purchases->qty_purchase);
+                    Record::create($data);
+                } 
+            };
+        };
         dispatch(new checkrecord());
         return back()->with('pesan', 'Stok barang telah dihapus!');
     }

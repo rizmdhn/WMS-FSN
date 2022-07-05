@@ -144,33 +144,5 @@ class SellController extends Controller
         return back()->with('pesan', 'Data dikirim ke laporan');
     }
 
-    public function getKehadirandatacustomDate(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'start_date' => [
-                'required',
-                'date'
-            ],
-            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                "success" => false,
-                "message" => 'Validation Error : ' . $validator->errors()
-            ], 422);
-        }
-        $startdate = Carbon::parse($request['start_date'])->format('Y-m-d');
-        $enddate = Carbon::parse($request['end_date'])->format('Y-m-d');
-        $data = Sell::whereDate('tanggal', '>=', $startdate)
-            ->whereDate('tanggal', '<=', $enddate)
-            ->get();
-        return response()->json([
-            "success" => true,
-            "total" => $data->count(),
-            "start_date" => $startdate,
-            "end_date" => $enddate,
-            "data" => $data,
-
-        ], 200);
-    }
+   
 }

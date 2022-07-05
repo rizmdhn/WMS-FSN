@@ -23,6 +23,48 @@
                         <div class="box-header">
                             <h3 class="box-title">Laporan barang masuk</h3>
                         </div>
+                        <div class="main-panel">
+                            <div class="content-wrapper">
+                                <div class="row page-title-header">
+                                    <div class="col-12">
+                                        <div class="page-header">
+                                                <button id="btnLap" data-toggle="modal" data-target="#modalLaporan"
+                                                    style="float:right; margin-left:5px;" type="submit"
+                                                    class="btn btn-outline-warning btn-sm">Laporan Pengambilan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade " id="modalLaporan">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Message</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h5>Masukan Tanggal Laporan</h5>
+                                                <form method="POST" action="/report2-export">
+                                                    {{ csrf_field() }}
+                                                    <input id="start_date" name="start_date" type="date" required>
+                                                    s/d
+                                                    <input id="end_date" name='end_date' type="date" required>
+                                                    <input type="hidden" name="type" id="type" value="xlsx">
+                                                    <button type="submit" style="margin-top: -1px;"
+                                                        class="btn btn-outline-info"><i
+                                                            style="margin: -1px;"></i>Print</button>
+                                                </form>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                         <!-- /.box-header -->
                         <div class="box-body">
                             @include('gudang/notification')

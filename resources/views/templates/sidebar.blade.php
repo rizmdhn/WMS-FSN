@@ -6,9 +6,10 @@
     <a href="{{ route('purchase.index') }}" class="list-group-item list-group-item-action bg-light">Barang Masuk</a>
     <a href="{{ route('report.index') }}" class="list-group-item list-group-item-action bg-light">Laporan Pengambilan</a>
     <a href="{{ route('report2.index') }}" class="list-group-item list-group-item-action bg-light">Laporan Barang Masuk</a>
+    <a href="{{ route('product.index') }}" class="list-group-item list-group-item-action bg-light">Data Barang</a>
+
     <!-- yang hanya bisa diakses admin -->
     @if(Auth::user()->akses == 'admin')
-    <a href="{{ route('product.index') }}" class="list-group-item list-group-item-action bg-light">Data Barang</a>
     <a href="{{ route('gudang.index') }}" class="list-group-item list-group-item-action bg-light">Gudang</a>
     <a href="{{ route('supplier.index') }}" class="list-group-item list-group-item-action bg-light">Seksi Pemasok</a>
     <a href="{{ route('user.index') }}" class="list-group-item list-group-item-action bg-light">Data Operator</a>
