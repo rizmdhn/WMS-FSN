@@ -103,7 +103,7 @@ class PurchaseController extends Controller
                         $data['stokawal_produk'] = $recordlast->stokakhir_produk;
                     }
                     $data['qty_keluar'] = $purchases->qty_purchase;
-                    $data['tanggal'] = Carbon::now();
+                    $data['tanggal'] = $date;
                     $data['stokakhir_produk'] = ($product->stok_produk - $purchases->qty_purchase);
                     Record::create($data);
                 } 
