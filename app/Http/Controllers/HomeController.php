@@ -60,7 +60,6 @@ class HomeController extends Controller
                        array_push($tanggal, $date);
                        }
                 }
-               
                 $purchase = Purchase::where('expired' , '<=', $today)->where('id_produk' , $produk->id_produk)->where('is_deleted', false)->get();  
                 if($purchase->isNotEmpty()) {
                     foreach($purchase as $item){

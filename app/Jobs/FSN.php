@@ -38,7 +38,7 @@ class FSN implements ShouldQueue
         $product = Product::all();
         $year = Carbon::now()->year;
         $date = Carbon::now()->toDateString();
-        $month = Carbon::now()->month;
+        $monthnow = Carbon::now()->month;
         foreach ($product as $key => $produk) {
             $item = collect();
             $totaldays = 0;
@@ -62,15 +62,15 @@ class FSN implements ShouldQueue
                 $stokakhir = $rec->stokakhir_produk;
                 $qtymasuk = $rec->qty_masuk;
                 $qtykeluar = $rec->qty_keluar;
-                if ($qtykeluar != 0 && $qtymasuk != 0) {
+                if ($qtykeluar != 0) {
                     $PersedianRata2 = ($stokawal + $stokakhir) / 2;
                     $torpartial = $qtykeluar / $PersedianRata2;
                     $wsp = $days / $torpartial;
                     $TOR = $totaldays / $wsp;
-                }else if ($qtykeluar == 0 || $qtymasuk == 0) {
-                    $torpartial =0;
-                    $wsp =0;
-                    $TOR =0;   
+                }else if ($qtykeluar == 0) {
+                    $torpartial = 0;
+                    $wsp = 0;
+                    $TOR = 0;   
                 }
                 $input['Rata2_persediaan'] = $PersedianRata2;
                 $input['TOR_partial'] = $torpartial;

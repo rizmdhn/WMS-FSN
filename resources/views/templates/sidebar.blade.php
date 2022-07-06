@@ -11,7 +11,6 @@
     <!-- yang hanya bisa diakses admin -->
     @if(Auth::user()->akses == 'admin')
     <a href="{{ route('gudang.index') }}" class="list-group-item list-group-item-action bg-light">Gudang</a>
-    <a href="{{ route('supplier.index') }}" class="list-group-item list-group-item-action bg-light">Seksi Pemasok</a>
     <a href="{{ route('user.index') }}" class="list-group-item list-group-item-action bg-light">Data Operator</a>
 
     <li class="nav-item dropdown" style="list-style-type: none;">
