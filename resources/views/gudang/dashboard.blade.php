@@ -51,6 +51,12 @@
                                     <option value="{{ $item }}">{{ $item }}</option>
                                 @endforeach
                             </select>
+                            <select name="entries" id="entries">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                            </select>
                         </div>
 
                         <!-- /.box-header -->
@@ -167,6 +173,7 @@
                 e.preventDefault();
                 $("#wrapper").toggleClass("toggled");
             });
+            var entriesSelected = $('#entries').val();
             var valueSelected = $('#tanggal').val();
             var data_product = "{{ $product }}";
             var data = "{{ $chartdata }}";
@@ -305,6 +312,78 @@
             });
 
         });
+        // $('#entries').on('change', function(e) {
+        //     myChart.destroy();
+        //     resetCanvas();
+        //     var optionSelected = $("option:selected", this);
+        //     var valueSelected = this.value;
+        //     var data = "{{ $chartdata }}";
+        //     var tabledata = "{{ $tabledata }}";
+        //     var dataset = JSON.parse(data.replace(/&quot;/g, '"'));
+        //     console.log(dataset);
+        //     var tabledataset = JSON.parse(tabledata.replace(/&quot;/g, '"'));
+        //     var databulan = dataset[valueSelected];
+        //     var tabledatabulan = tabledataset[valueSelected];
+        //     const qty_keluar = [];
+        //     const nama_produk = [];
+        //     const qty_masuk = [];
+        //     const qty_stok = [];
+        //     const qty_stokawal = [];
+        //     for ( i = 0; i = optionSelected; i++) {
+        //         nama_produk.push(databulan[i].nama_produk);
+        //         qty_keluar.push(databulan[i].qty_keluar);
+        //         qty_stokawal.push(databulan[i].stokawal_produk);
+        //         qty_masuk.push(databulan[i].qty_masuk);
+        //         qty_stok.push(databulan[i].stokakhir_produk);
+        //     }
+        //     const ctx = document.getElementById('myChart');
+
+        //     myChart = new Chart(ctx, {
+        //         type: 'bar',
+        //         data: {
+        //             labels: nama_produk,
+        //             datasets: [{
+        //                 label: 'Stok Awal',
+        //                 data: qty_stokawal,
+        //                 backgroundColor: [
+        //                     'rgba(54, 162, 235)',
+        //                 ],
+        //                 borderWidth: 3
+        //             }, {
+        //                 label: 'Kuantitas Keluar',
+        //                 data: qty_keluar,
+        //                 backgroundColor: [
+        //                     'rgba(255, 255, 0)',
+        //                 ],
+        //                 borderWidth: 3
+        //             }, {
+        //                 label: 'Kuantitas Masuk',
+        //                 data: qty_masuk,
+        //                 backgroundColor: [
+        //                     'rgba(0, 162, 0)',
+        //                 ],
+        //                 borderWidth: 3
+        //             }, {
+        //                 label: 'Stok Akhir',
+        //                 data: qty_stok,
+        //                 backgroundColor: [
+        //                     'rgba(255, 51, 51)',
+        //                 ],
+        //                 borderWidth: 3
+        //             }]
+        //         },
+        //         options: {
+        //             responsive: true,
+        //             maintainAspectRatio: false,
+        //             scales: {
+        //                 y: {
+        //                     beginAtZero: true
+        //                 }
+        //             }
+        //         }
+        //     });
+        //        });
+
 
         // perubahan 
         $('#tanggal').on('change', function(e) {

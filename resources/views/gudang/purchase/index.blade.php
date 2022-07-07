@@ -169,6 +169,7 @@
             });
 
         });
+        $('#id_produk').select2();
 
         $(function() {
             $('#example1').DataTable()

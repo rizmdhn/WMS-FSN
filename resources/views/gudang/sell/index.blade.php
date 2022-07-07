@@ -3,6 +3,7 @@
 <head>
   @include('templates.head')
   <title>Halaman Pengambilan</title>
+  @include('templates.scripts')
   <style type="text/css">
     .bawah{
       min-height: 200px
@@ -15,7 +16,6 @@
     <!-- Sidebar -->
     @include('templates.sidebar')
     <!-- /#sidebar-wrapper -->
-
     <!-- Page Content -->
     <div id="page-content-wrapper">
       @include('templates.header')
@@ -61,12 +61,13 @@
 
                   <div class="form-group">
                     <label>Nama Barang</label>
-                    <select class="form-control form-control-sm" name="id_produk">
+                    <select class="form-control form-control-sm" id="id_produk" name="id_produk">
                       <option>- Nama barang -</option>
                       @foreach($products as $product)
                       <option value="{{$product->id_produk}}">{{$product->nama_produk}}</option>
                       @endforeach
                     </select>
+                    
                     <div style="color: salmon">
                       <small><i>nama barang harus sudah terdaftar di data barang</i></small>
                     </div>
@@ -147,6 +148,10 @@
 
   <!-- page script -->
   <script>
+    
+
+    $(document).ready(function() {
+    $('#id_produk').select2();
     $(function () {
       $('#example1').DataTable()
       $('#example2').DataTable({
@@ -158,7 +163,11 @@
         'autoWidth'   : false
       })
     })
-  </script>
+  });
+
+
+</script>
+  
 
   @include('templates.modal')
 </body>
