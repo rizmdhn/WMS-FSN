@@ -74,9 +74,9 @@ class checkrecord implements ShouldQueue
                     $month =  Carbon::createFromFormat('Y-m-d', $rec->Tanggal)->month;
                     $year =  Carbon::createFromFormat('Y-m-d', $rec->Tanggal)->year;
                     $total_sell = Sell::where('id_produk', $produk->id_produk)->whereMonth('tgl_sell', $month)
-                        ->whereYear('tgl_sell', '<=', $year)->get();
+                        ->whereYear('tgl_sell', '<=', $year)->where('status', '1')->get();
                     $total_purchase = Purchase::where('id_produk', $produk->id_produk)->whereMonth('tgl_purchase', $month)
-                        ->whereYear('tgl_purchase', '<=', $year)->get();
+                        ->whereYear('tgl_purchase', '<=', $year)->where('status', '1')->get();
                     foreach ($total_purchase as $total) {
                         $totalpurc = $totalpurc + $total->qty_purchase;
                     }
