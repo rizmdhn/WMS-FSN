@@ -85,28 +85,28 @@ class PurchaseController extends Controller
             $input['qty'] = $purchases->qty_purchase;
             $input['status'] = 1;
             if (Sell::create($input)) {
-                $month = Carbon::createFromFormat('Y-m-d', $date)->month;
-                $year = Carbon::createFromFormat('Y-m-d', $date)->year;
+                // $month = Carbon::createFromFormat('Y-m-d', $date)->month;
+                // $year = Carbon::createFromFormat('Y-m-d', $date)->year;
     
-                $record = Record::where('id_produk', $purchases->id_produk)->WhereMonth('tanggal', $month)
-                    ->whereYear('tanggal', '=', $year)->first();
-                $recordlast = Record::where('id_produk',  $purchases->id_produk)->WhereMonth('tanggal', ($month - 1))
-                    ->whereYear('tanggal', '=', $year)->first();
-                if (is_null($record)) {
-                    $product = Product::where('id_produk',  $purchases->id_produk)->first();
-                    $data['id_produk'] = $product->id_produk;
-                    $data['kode_produk'] = $product->kode_produk;
-                    $data['nama_produk'] = $product->nama_produk;
-                    if (is_null($recordlast)) {
-                        $data['stokawal_produk'] = $product->stok_produk + $purchases->qty_purchase;
-                    } else {
-                        $data['stokawal_produk'] = $recordlast->stokakhir_produk;
-                    }
-                    $data['qty_keluar'] = $purchases->qty_purchase;
-                    $data['tanggal'] = $date;
-                    $data['stokakhir_produk'] = ($product->stok_produk - $purchases->qty_purchase);
-                    Record::create($data);
-                } 
+                // $record = Record::where('id_produk', $purchases->id_produk)->WhereMonth('tanggal', $month)
+                //     ->whereYear('tanggal', '=', $year)->first();
+                // $recordlast = Record::where('id_produk',  $purchases->id_produk)->WhereMonth('tanggal', ($month - 1))
+                //     ->whereYear('tanggal', '=', $year)->first();
+                // if (is_null($record)) {
+                //     $product = Product::where('id_produk',  $purchases->id_produk)->first();
+                //     $data['id_produk'] = $product->id_produk;
+                //     $data['kode_produk'] = $product->kode_produk;
+                //     $data['nama_produk'] = $product->nama_produk;
+                //     if (is_null($recordlast)) {
+                //         $data['stokawal_produk'] = $product->stok_produk + $purchases->qty_purchase;
+                //     } else {
+                //         $data['stokawal_produk'] = $recordlast->stokakhir_produk;
+                //     }
+                //     $data['qty_keluar'] = $purchases->qty_purchase;
+                //     $data['tanggal'] = $date;
+                //     $data['stokakhir_produk'] = ($product->stok_produk - $purchases->qty_purchase);
+                //     Record::create($data);
+                // } 
             };
         };
         dispatch(new checkrecord());

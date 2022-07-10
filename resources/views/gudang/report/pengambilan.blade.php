@@ -111,6 +111,7 @@
                                                     <td>{{ $sell->qty }}</td>
                                                     <td>{{ $sell->users->name }}</td>
                                                     <td>{{ $sell->products->ket_produk }}</td>
+                                                    @if (Auth::user()->akses !== 'admin')
                                                     <td>
                                                         <form action="{{ url('report') }}/{{ $sell->id_sell }}"
                                                             method="post">
@@ -121,7 +122,9 @@
                                                             {{ csrf_field() }}
                                                             <input type="hidden" name="_method" value="DELETE">
                                                         </form>
-                                                    </td>
+                                                    </td>               
+                                                    @endif
+                                                   
                                                 </tr>
                                             @endforeach
                                         </tbody>

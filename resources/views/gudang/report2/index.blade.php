@@ -21,7 +21,7 @@
                 <div class="container-fluid">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">Laporan barang masuk</h3>
+                            <h3 class="box-title">Laporan Barang Masuk</h3>
                         </div>
                         <div class="main-panel">
                             <div class="content-wrapper">
@@ -30,7 +30,7 @@
                                         <div class="page-header">
                                                 <button id="btnLap" data-toggle="modal" data-target="#modalLaporan"
                                                     style="float:right; margin-left:5px;" type="submit"
-                                                    class="btn btn-outline-warning btn-sm">Laporan Pengambilan</button>
+                                                    class="btn btn-outline-warning btn-sm">Laporan Barang Masuk</button>
                                         </div>
                                     </div>
                                 </div>
@@ -78,11 +78,11 @@
                                         <th>Jumlah</th>
                                         <th>Expired</th>
                                         <th>Keterangan</th>
-                                        @if (Auth::user()->akses !== 'admin')
+                                        {{-- @if (Auth::user()->akses !== 'admin')
                                             <th style="display: none;" class="none">Action</th>
                                         @else
                                             <th class="none">Action</th>
-                                        @endif
+                                        @endif --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -94,7 +94,7 @@
                                             <td>{{ $purchase->qty_purchase }}</td>
                                             <td>{{ $purchase->expired }}</td>
                                             <td>{{ $purchase->products->ket_produk }}</td>
-                                            <td>
+                                            {{-- <td>
                                                 <form action="{{ url('report2')}}/{{$purchase->id_purchase}}" method="post">
                                                   {{method_field('delete')}}
                                                   {{csrf_field()}}
@@ -102,7 +102,7 @@
                                                   {{csrf_field()}}
                                                   <input type="hidden" name="_method" value="DELETE">
                                                 </form>
-                                              </td>                                                
+                                              </td>                                                 --}}
                                         </tr>
                                     @endforeach
                                 </tbody>
