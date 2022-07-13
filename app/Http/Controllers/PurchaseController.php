@@ -23,8 +23,11 @@ class PurchaseController extends Controller
     public function index()
     {
 
-        $purchases = Purchase::all()->where('status', '0')->where('is_deleted', false);
-
+        $purchases = DB::table('purchases')->join('products', 'purchases.id_produk', '=', 'products.id_produk')
+        ->join('users', 'purchases.id_karyawan', '=', 'users.id')
+        ->select('purchases.*', 'products.*', 'users.*')
+        ->where('status', '=', '0')->where('is_deleted', false)
+        ->get();;
         $products  = Product::all();
         $data = array(
             'products'   => $products,
@@ -35,7 +38,7 @@ class PurchaseController extends Controller
 
     public function store(Request $request)
     {
-
+        $request['id_karyawan'] = Auth::user()->id;
         if (Purchase::create($request->all())) {
             $timestemp = $request->tgl_purchase;
             $month = Carbon::createFromFormat('Y-m-d', $timestemp)->month;

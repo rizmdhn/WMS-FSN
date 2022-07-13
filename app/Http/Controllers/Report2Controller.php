@@ -15,7 +15,11 @@ class Report2Controller extends Controller{
 
     public function index(){
 
-    	$purchases = Purchase::all()->where('status', '1');
+    	$purchases = DB::table('purchases')->join('products', 'purchases.id_produk', '=', 'products.id_produk')
+        ->join('users', 'purchases.id_karyawan', '=', 'users.id')
+        ->select('purchases.*', 'products.*', 'users.*')
+        ->where('status', '=', '1')->where('is_deleted', false)
+        ->get();;
         return view('gudang.report2.index', ['purchases'=>$purchases]);
     }
 

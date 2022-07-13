@@ -13,4 +13,8 @@ class Purchase extends Model{
 
         return $this->belongsTo('App\Product', 'id_produk');
     }
+    public function users(){
+
+        return $this->belongsTo('App\User', 'id_karyawan', 'id');
+    }
 }

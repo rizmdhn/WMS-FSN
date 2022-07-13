@@ -94,10 +94,8 @@
                                                 <th>Jumlah</th>
                                                 <th>Diambil oleh</th>
                                                 <th>Keterangan</th>
-                                                @if (Auth::user()->akses !== 'admin')
-                                                    <th style="display: none;" class="none">Action</th>
-                                                @else
-                                                    <th class="none">Action</th>
+                                                @if (Auth::user()->akses === 'admin')
+                                                <th>Action</th>
                                                 @endif
                                             </tr>
                                         </thead>
@@ -111,7 +109,7 @@
                                                     <td>{{ $sell->qty }}</td>
                                                     <td>{{ $sell->users->name }}</td>
                                                     <td>{{ $sell->products->ket_produk }}</td>
-                                                    @if (Auth::user()->akses !== 'admin')
+                                                    @if (Auth::user()->akses === 'admin')
                                                     <td>
                                                         <form action="{{ url('report') }}/{{ $sell->id_sell }}"
                                                             method="post">
@@ -124,7 +122,6 @@
                                                         </form>
                                                     </td>               
                                                     @endif
-                                                   
                                                 </tr>
                                             @endforeach
                                         </tbody>

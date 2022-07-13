@@ -95,7 +95,7 @@
                                         <th>Tanggal Masuk</th>
                                         <th>Kode Barang</th>
                                         <th>Nama Barang</th>
-                                        <th>Supplier</th>
+                                        <th>Karyawan</th>
                                         <th>Jumlah</th>
                                         <th>Action</th>
                                     </tr>
@@ -105,11 +105,10 @@
                                         <tr>
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $purchase->tgl_purchase }}</td>
-                                            <td>{{ $purchase->products->kode_produk }}</td>
-                                            <td>{{ $purchase->products->nama_produk }}</td>
-                                            <td>{{ $purchase->products->id_supplier }}</td>
+                                            <td>{{ $purchase->kode_produk }}</td>
+                                            <td>{{ $purchase->nama_produk }}</td>
+                                            <td>{{ $purchase->name }}</td>
                                             <td>{{ $purchase->qty_purchase }}</td>
-
                                             <td>
                                                 <form action="{{ url('purchase') }}/{{ $purchase->id_purchase }}"
                                                     method="post">

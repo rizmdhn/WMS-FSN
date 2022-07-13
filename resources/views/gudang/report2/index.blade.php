@@ -75,26 +75,27 @@
                                         <th>Tanggal Masuk</th>
                                         <th>Kode Barang</th>
                                         <th>Nama Barang</th>
+                                        <th>Di input oleh</th>
                                         <th>Jumlah</th>
                                         <th>Expired</th>
                                         <th>Keterangan</th>
-                                        {{-- @if (Auth::user()->akses !== 'admin')
-                                            <th style="display: none;" class="none">Action</th>
-                                        @else
-                                            <th class="none">Action</th>
-                                        @endif --}}
+                                        @if (Auth::user()->akses === 'admin')
+                                        <th>Action</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($purchases as $purchase)
                                         <tr>
                                             <td>{{ $purchase->tgl_purchase }}</td>
-                                            <td>{{ $purchase->products->kode_produk }}</td>
-                                            <td>{{ $purchase->products->nama_produk }}</td>
+                                            <td>{{ $purchase->kode_produk }}</td>
+                                            <td>{{ $purchase->nama_produk }}</td>
+                                            <td>{{ $purchase->name }}</td>
                                             <td>{{ $purchase->qty_purchase }}</td>
                                             <td>{{ $purchase->expired }}</td>
-                                            <td>{{ $purchase->products->ket_produk }}</td>
-                                            {{-- <td>
+                                            <td>{{ $purchase->ket_produk }}</td>
+                                            @if (Auth::user()->akses === 'admin')
+                                                <td>
                                                 <form action="{{ url('report2')}}/{{$purchase->id_purchase}}" method="post">
                                                   {{method_field('delete')}}
                                                   {{csrf_field()}}
@@ -102,7 +103,9 @@
                                                   {{csrf_field()}}
                                                   <input type="hidden" name="_method" value="DELETE">
                                                 </form>
-                                              </td>                                                 --}}
+                                              </td>                      
+                                            @endif
+                                            
                                         </tr>
                                     @endforeach
                                 </tbody>

@@ -27,7 +27,6 @@ class SellController extends Controller
     public function index()
     {
 
-        $sells = Sell::all();
         $sells = DB::table('sells')
             ->join('products', 'sells.id_produk', '=', 'products.id_produk')
             ->join('users', 'sells.id_karyawan', '=', 'users.id')
