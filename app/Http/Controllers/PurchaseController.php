@@ -22,7 +22,6 @@ class PurchaseController extends Controller
 
     public function index()
     {
-
         $purchases = DB::table('purchases')->join('products', 'purchases.id_produk', '=', 'products.id_produk')
         ->join('users', 'purchases.id_karyawan', '=', 'users.id')
         ->select('purchases.*', 'products.*', 'users.*')
