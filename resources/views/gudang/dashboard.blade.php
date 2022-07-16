@@ -101,7 +101,7 @@
                             <h3 class="box-title">Kapasitas Gudang</h3>
                             @if ($pesangudang != null)
                                 <div class="alert alert-danger" role="alert">
-                                    <b>Enodes Gudang Menipis</b> :
+                                    <b>Kapasitas Gudang Menipis</b> :
                                     @foreach ($pesangudang as $item)
                                         {{ $item }}
                                     @endforeach
@@ -110,23 +110,23 @@
                             <table id="table_gudang" class="table table-bordered">
                                 <tbody>
                                     <tr>
-                                        <th>Total enodes</th>
+                                        <th>Total Kapasitas</th>
                                         <td>{{ $gudang->Kapasitas_GT }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Enodes Barang F</th>
+                                        <th>Kapasitas Barang F</th>
                                         <td>{{ $gudang->sisa_F }} /
                                             {{ $gudang->Kapasitas_F }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Enodes Barang S</th>
+                                        <th>Kapasitas Barang S</th>
                                         <td>{{ $gudang->sisa_S  }} /
                                             {{ $gudang->Kapasitas_S }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Enodse Barang N</th>
+                                        <th>Kapasitas Barang N</th>
                                         <td>{{ $gudang->sisa_N  }} /
                                             {{ $gudang->Kapasitas_N }}</td>
                                     </tr>
