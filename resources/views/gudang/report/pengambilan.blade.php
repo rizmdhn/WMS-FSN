@@ -37,16 +37,16 @@
                 <div class="container-fluid">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">Laporan pengambilan barang</h3>
+                            <h3 class="box-title">Laporan Barang Keluar</h3>
                         </div>
                         <div class="main-panel">
                             <div class="content-wrapper">
                                 <div class="row page-title-header">
                                     <div class="col-12">
-                                        <div class="page-header">
+                                        <div class="pb-2" >
                                                 <button id="btnLap" data-toggle="modal" data-target="#modalLaporan"
                                                     style="float:right; margin-left:5px;" type="submit"
-                                                    class="btn btn-outline-warning btn-sm">Laporan Pengambilan</button>
+                                                    class="btn btn-outline-warning btn-sm">Laporan Barang Keluar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -151,15 +151,7 @@
                 'ordering': true,
                 'info': true,
                 'autoWidth': false,
-                'buttons': [{
-                    extend: 'excelHtml5',
-                    text: 'Save current page',
-                    exportOptions: {
-                        modifier: {
-                            page: 'current'
-                        }
-                    }
-                }]
+
             });
 
 

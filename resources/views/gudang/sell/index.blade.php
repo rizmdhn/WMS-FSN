@@ -23,7 +23,7 @@
       <!-- Content Header (Page header) -->
       <section class="content mt-2">
         <div class="container-fluid">
-          <h3>Data Pengambilan Barang</h3>
+          <h3>Data Pengeluaran Barang</h3>
           <hr>
         </div>
       </section>

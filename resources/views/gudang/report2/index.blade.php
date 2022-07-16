@@ -128,22 +128,21 @@
 
     <!-- page script -->
     <script>
-        $(function() {
-            $('#example1').DataTable({
+ $(document).ready(function() {
+            $('#example1').DataTable()
+            $('#example2').DataTable({
                 'paging': true,
-                'lengthChange': true,
-                'searching': true,
+                'lengthChange': false,
+                'searching': false,
                 'ordering': true,
                 'info': true,
-                'autoWidth': true,
-                'order': [0, 'desc'],
-                'dom' : 'Bfrtip',
-                'buttons' : [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
+                'autoWidth': false,
+
             });
-            })
-           
+
+
+
+        });
     </script>
 
     <!-- modal -->
