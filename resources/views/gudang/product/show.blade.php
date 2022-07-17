@@ -99,7 +99,6 @@
                                     <td>{{ $item->qty_purchase }}</td>
                                     <td>{{ $item->expired }}</td>
                                     <td>
-                                        
                                     </td>
                                 </tr>
                             @endif
