@@ -17,7 +17,7 @@ use Psy\Util\Json;
 class ReportController extends Controller
 {
     public function index(){
-    	$sells = Sell::all()->where('status', '1');
+    	$sells = Sell::all()->where('status', '1')->sortByDesc('tgl_sell');
         return view('gudang.report.pengambilan', ['sells'=>$sells]);
     }
 

@@ -18,8 +18,8 @@ class Report2Controller extends Controller{
     	$purchases = DB::table('purchases')->join('products', 'purchases.id_produk', '=', 'products.id_produk')
         ->join('users', 'purchases.id_karyawan', '=', 'users.id')
         ->select('purchases.*', 'products.*', 'users.*')
-        ->where('status', '=', '1')->where('is_deleted', false)
-        ->get();;
+        ->where('status', '=', '1')->where('is_deleted', false)->orderby('tgl_purchase', 'desc')
+        ->get();
         return view('gudang.report2.index', ['purchases'=>$purchases]);
     }
 

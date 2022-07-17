@@ -72,6 +72,7 @@
                                 <thead>
                                     <?php $no = 1; ?>
                                     <tr style="background-color: rgb(230, 230, 230);">
+                                        <th>No</th>
                                         <th>Tanggal Masuk</th>
                                         <th>Kode Barang</th>
                                         <th>Nama Barang</th>
@@ -87,6 +88,7 @@
                                 <tbody>
                                     @foreach ($purchases as $purchase)
                                         <tr>
+                                            <td>{{ $no++ }}</td>
                                             <td>{{ $purchase->tgl_purchase }}</td>
                                             <td>{{ $purchase->kode_produk }}</td>
                                             <td>{{ $purchase->nama_produk }}</td>
