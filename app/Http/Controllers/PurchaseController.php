@@ -122,9 +122,4 @@ class PurchaseController extends Controller
         return back()->with('pesan', 'Data dikirim ke laporan');
     }
 
-
-    public function report()
-    {
-
-    }
 }
