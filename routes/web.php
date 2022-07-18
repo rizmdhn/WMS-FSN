@@ -56,8 +56,8 @@ Route::group(['middleware'=>'auth'], function(){
 	Route::resource('supplier', 'SupplierController');
 	Route::get('/supplier/{id_supplier}/show', 'SupplierController@show');
 	//=========================================================================
-	Route::get('/setting', 'UserSettingController@form')->name('user.setting');
-	Route::post('/setting', 'UserSettingController@update');
+	Route::get('/setting', 'UserController@formUser')->name('user.setting');
+	Route::post('/setting', 'UserController@updateUser');
 	//=========================================================================
 	Route::group(['middleware'=>'akses.admin'], function(){
 		Route::resource('category', 'CategoryController');
